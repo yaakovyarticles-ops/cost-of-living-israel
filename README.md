@@ -1,17 +1,21 @@
 # Cost of Living in Israel, 1995–2024
 
-An interactive Hebrew (RTL) presentation: thirty years of prices, wages and housing costs in Israel, in a single HTML file with a Three.js 3D scene, JavaScript navigation, and a slide produced by Python.
+An interactive Hebrew (RTL) presentation: thirty years of prices, wages and housing costs in Israel, in a single HTML file with a Three.js 3D scene, JavaScript navigation, and slides produced by Python.
 
 **Open it:** download the repository and double-click `index.html` (no server, no network needed).
 
 | | |
 |---|---|
-| ![Title slide](docs/screenshots/slide-01.png) | ![Inflation](docs/screenshots/slide-02.png) |
+| ![Title and three headline numbers](docs/screenshots/slide-01.png) | ![Annual inflation, 3D bars](docs/screenshots/slide-02.png) |
 | 1 · Title and three headline numbers | 2 · Annual inflation, 3D bars |
-| ![Housing](docs/screenshots/slide-03.png) | ![Household spending](docs/screenshots/slide-04.png) |
-| 3 · An apartment costs 86 → 173 average salaries | 4 · Where the monthly budget goes |
-| ![Python analysis](docs/screenshots/slide-05.png) | ![Summary](docs/screenshots/slide-06.png) |
-| 5 · **Python analysis**, index 2000 = 100 | 6 · Summary |
+| ![Apartment price in average salaries: 86 → 173](docs/screenshots/slide-03.png) | ![Rents by city (CBS via Globes)](docs/screenshots/slide-04.png) |
+| 3 · Apartment price in average salaries: 86 → 173 | 4 · Rents by city (CBS via Globes) |
+| ![Where the monthly budget goes (CBS 2023)](docs/screenshots/slide-05.png) | ![Top vs bottom income decile (CBS 2023)](docs/screenshots/slide-06.png) |
+| 5 · Where the monthly budget goes (CBS 2023) | 6 · Top vs bottom income decile (CBS 2023) |
+| ![**Python analysis**, index 2000 = 100](docs/screenshots/slide-07.png) | ![Israel vs OECD, wages vs prices](docs/screenshots/slide-08.png) |
+| 7 · **Python analysis**, index 2000 = 100 | 8 · Israel vs OECD, wages vs prices |
+| ![Possible levers (for discussion)](docs/screenshots/slide-09.png) | ![Summary](docs/screenshots/slide-10.png) |
+| 9 · Possible levers (for discussion) | 10 · Summary |
 
 ## The finding
 Between 2000 and 2024 consumer prices rose about 1.5×, the average wage 1.9× and the average apartment 3.8×. In real terms wages gained roughly 26% while apartment prices gained about 154%, so the number of average salaries needed to buy an apartment doubled (86 → 173).
@@ -19,7 +23,7 @@ Between 2000 and 2024 consumer prices rose about 1.5×, the average wage 1.9× a
 ## How the requirements are met
 - **JavaScript:** previous/next buttons, progress dots, keyboard (← forward in RTL), `#3` deep links, `?auto` auto-play.
 - **Three.js (3D):** a "data city" of 30 columns that morphs between datasets as slides change; the title slide also has a CSS-3D cube with coins.
-- **Python:** `src/analysis.py` reads `data/data.json`, computes the indices and draws `docs/charts/index_2000.png`; `src/build.py` embeds the chart and the computed numbers into slide 5.
+- **Python:** `src/analysis.py` reads `data/data.json`, computes the indices and draws `docs/charts/index_2000.png`; `src/build.py` generates slides 4, 6, 7, 8 and 9 from `data/data.json` and the analysis output (bar rows, the indices chart, the computed numbers). Slides 1–3, 5 and 10 are the original hand-written deck, with the spending data updated.
 - **Single file:** Three.js and the fonts are embedded in `index.html`. The same fonts are also stored in `fonts/` (see `fonts/README.md` for licensing notes).
 
 ## Regenerate the Python slide
@@ -46,10 +50,12 @@ Work was led through Claude Code in the terminal: requirements first (PRD), then
 What I corrected along the way: a BiDi bug that rendered `+26.1%` as `%26.1+`, a stale slide counter after adding a slide, and screenshots captured mid-transition.
 
 Known limitations:
-- The numbers are rounded, illustrative figures based on CBS and Bank of Israel publications; they were **not** re-verified against the official series. Verify before citing.
+- **Official, read in full:** the CBS Household Expenditure Survey 2023 (published 2026-01-01): spending shares (slide 5) and income-decile figures (slide 6). CBS notes that 2023 income measurement changed, so these are not comparable with earlier years.
+- **Taken from press reports of CBS / OECD / Ministry of Economy data** (Globes, Times of Israel): rents by city (Q3 2024), housing-services index, OECD price-level and food comparisons (the food figure is from 2017 data), 2024 wage growth. The article dates and sources are on each slide.
+- **Rounded, illustrative and not re-verified:** the annual inflation series 1995–2024 and the apartment price / average wage points used in slides 2, 3 and 7. Verify against cbs.gov.il before citing.
 - The Python chart uses English labels to avoid RTL shaping issues in matplotlib.
 - Only the Assistant font is clearly open-licensed; check the others before reuse.
-- The original 4-chart deck was generated in an earlier session whose prompts were not saved.
+- Slides 1–3, 5 and 10 were generated in an earlier session whose prompts were not saved.
 
 ## Authors
 Yaakov Geppert and partner (details are in the submission form).
