@@ -25,6 +25,11 @@
       ctx.textAlign="right";ctx.fillStyle=s.c;ctx.fillText(s.n+" "+Math.round(val(s.k,pos)),hx-9,hy-(s.k==="price_idx"?10:(s.k==="wage_idx"?-4:-16)));
     });
     ctx.strokeStyle="rgba(255,255,255,.25)";ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(X(pos,w),12);ctx.lineTo(X(pos,w),h-24);ctx.stroke();ctx.setLineDash([]);
+    var lastEv=null;
+    (D.events||[]).forEach(function(e){var i=e.year-D.years[0],x=X(i,w),passed=pos>=i-.001;
+      ctx.fillStyle=passed?"rgba(255,255,255,.85)":"rgba(255,255,255,.25)";ctx.beginPath();ctx.arc(x,h-22,passed?3.5:2.5,0,7);ctx.fill();
+      if(passed)lastEv=e});
+    el("rEvent").textContent=lastEv?lastEv.text:"—";
     el("rYear").textContent=D.years[Math.round(pos)];
     el("rPrice").textContent=Math.round(val("price_idx",pos));el("rWage").textContent=Math.round(val("wage_idx",pos));el("rCpi").textContent=Math.round(val("cpi_idx",pos));
     el("rSave").textContent=val("years_to_save",pos).toFixed(1);

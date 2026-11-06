@@ -36,7 +36,8 @@ Every slide has its own 3D dataset and camera position in the Three.js scene beh
 - RTL and BiDi: numbers and years wrapped in `<bdi>`.
 - Works in current Chrome/Safari; no console errors.
 - Readable at 1600×900; navigation works with keyboard and mouse.
-- Data provenance is stated on every slide: CBS 2023 survey figures are official; rents, OECD and wage-growth figures come from press reports of official data; the inflation series and apartment/wage points are rounded and unverified.
+- Data provenance is stated on every slide with a badge (official / press report / rounded / model / discussion) and a source line: the CPI series, the 2024 dwelling price and the CBS 2023 survey are official; rents, OECD and wage-growth figures come from press reports; the 2000–2020 apartment prices and all wage points are rounded and unverified (`data/data.json` → `sources`).
+- Each content slide has a one-sentence takeaway under the title, and footnotes sit on a translucent plate so they stay legible over the 3D scene.
 
 ## 6. Out of scope
 Live data fetching, user accounts, mobile-specific layout, translation to other languages.

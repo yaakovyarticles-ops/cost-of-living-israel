@@ -36,7 +36,7 @@ def bar_row(label, value, vmax, text, color):
 
 
 # ---------- css ----------
-css = """<style>
+css = """<!--PY:css:START--><style>
 .brow{display:grid;grid-template-columns:7.5em 1fr 4.6em;align-items:center;gap:.8em;margin:.7em 0;font-size:1.02em}
 .brow .bt{display:block;height:1.15em;border-radius:.6em;background:rgba(255,255,255,.07);overflow:hidden;direction:rtl}
 .brow .bt i{display:block;height:100%;border-radius:.6em}
@@ -54,7 +54,13 @@ css = """<style>
 .rbtn,.rctl select{background:rgba(255,255,255,.1);color:inherit;border:1px solid rgba(255,255,255,.18);border-radius:.7em;padding:.3em .8em;font:inherit;cursor:pointer}
 .rbtn:hover,.rctl select:hover{background:rgba(255,255,255,.18)}
 .rread b.big{font-size:2.1em;line-height:1}
-</style>"""
+.badge{display:inline-block;margin-inline-start:.9em;padding:.12em .7em;border-radius:2em;font-size:.82em;font-weight:700;border:1px solid currentColor;vertical-align:middle;letter-spacing:.01em}
+.badge.ok{color:#3ddbc4;background:rgba(61,219,196,.12)}.badge.press{color:#ffc857;background:rgba(255,200,87,.12)}
+.badge.est{color:#ff8f8f;background:rgba(255,107,107,.12)}.badge.mdl{color:#b3a8ff;background:rgba(139,124,255,.14)}.badge.talk{color:#c9ccea;background:rgba(255,255,255,.08)}
+.take{margin:.2em 0 .5em;max-width:46em;font-size:1.08em;line-height:1.5;color:rgba(233,236,255,.86)}
+.take b{color:#ffc857}
+.src{background:rgba(10,12,32,.66);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);padding:.4em .9em;border-radius:.7em;color:rgba(233,236,255,.86)!important}
+</style><!--PY:css:END-->"""
 
 # ---------- rent ----------
 r = data["rent_4room_q3_2024_nis"]
@@ -140,6 +146,7 @@ race = f"""<!--PY:race:START-->
     <ul class="points rv rread">
       <li><span class="ic">◷</span><span>שנת <b class="big num" id="rYear">2000</b></span></li>
       <li><span class="ic">%</span><span>מדד (<bdi>2000 = 100</bdi>): דירה <b class="num" id="rPrice">100</b>, שכר <b class="num" id="rWage">100</b>, מחירים <b class="num" id="rCpi">100</b></span></li>
+      <li><span class="ic">!</span><span id="rEvent">—</span></li>
       <li><span class="ic">⌛</span><span>שנות חיסכון למקדמה: <b class="big num" id="rSave">{st['years_to_save_2000']}</b></span></li>
     </ul>
   </div>
@@ -203,8 +210,79 @@ put("race", race, "<!--PY:analysis:END-->", before=False)
 put("oecd", oecd, "<!--PY:race:END-->", before=False)
 put("policy", policy, "<!--PY:oecd:END-->", before=False)
 
-# slide counter initial text
+
+# ---------- sync the hard-coded chart data inside index.html with data.json ----------
 import re
+
+
+def sync_core(h):
+    infl = data["inflation_pct"]
+    h = re.sub(r"var infl=\{[^}]*\};", "var infl={" + ",".join(f"{y}:{v}" for y, v in infl.items()) + "};", h)
+    h = re.sub(r"var infl=\[[^\]]*\];", "var infl=[" + ",".join(str(infl[str(y)]) for y in range(1995, 2025)) + "];", h)
+    hs = data["housing"]
+    h = re.sub(r"var house=\[[^\]]*\];", "var house=[" + ",".join(
+        f'{{y:{x["year"]},p:{x["price_kils"]},w:{x["avg_wage"]}}}' for x in hs) + "];", h)
+    ratio = [(x["year"], round(x["price_kils"] * 1000 / x["avg_wage"], 1)) for x in hs]
+    h = re.sub(r"var pts=\[\[[^;]*?\]\];", "var pts=[" + ",".join(f"[{y},{r}]" for y, r in ratio) + "];", h)
+    r0, r1 = round(ratio[0][1]), round(ratio[-1][1])
+    h = re.sub(r'data-to="\d+">\d+</b> משכורות; כיום כ־<b class="num" data-to="\d+">\d+</b>',
+               f'data-to="{r0}">{r0}</b> משכורות; כיום כ־<b class="num" data-to="{r1}">{r1}</b>', h)
+    h = re.sub(r'מכ־<bdi>[\d.]+</bdi> מיליון ש"ח לכ־<bdi>[\d.]+</bdi> מיליון',
+               f'מכ־<bdi>{hs[0]["price_kils"]/1000:.1f}</bdi> מיליון ש"ח לכ־<bdi>{hs[-1]["price_kils"]/1000:.2f}</bdi> מיליון', h)
+    # inflation slide: text that depends on the series
+    for old, new in [
+        ('<b>שנות ה־<bdi>90</bdi>:</b> אינפלציה של <bdi>7–11%</bdi> בשנה, ושחיקה מהירה של הכנסות.',
+         '<b>שנות ה־<bdi>90</bdi>:</b> אינפלציה של <bdi>5–11%</bdi> בשנה (ממוצע שנתי), ושחיקה מהירה של הכנסות.'),
+        ('<b>עשור של יציבות:</b> בין <bdi>2003</bdi> ל־<bdi>2020</bdi> המדד כמעט ולא זז, ולעיתים אף ירד.',
+         '<b>עשור של יציבות:</b> בכל אחת מהשנים <bdi>2012</bdi>–<bdi>2021</bdi> האינפלציה הייתה בין <bdi dir="ltr">-0.6%</bdi> ל־<bdi>1.7%</bdi>, ולעיתים המחירים אף ירדו.'),
+        ('<b><bdi>2022</bdi>:</b> זינוק של כ־<bdi>5.3%</bdi>, השיא מזה כשני עשורים.',
+         '<b><bdi>2022</bdi>:</b> זינוק ל־<bdi>4.4%</bdi>, הגבוה ביותר מאז <bdi>2008</bdi> (<bdi>4.5%</bdi>); ב־<bdi>2023</bdi> <bdi>4.2%</bdi>.'),
+        ('מקור: הלמ"ס, מדד המחירים לצרכן (שינוי שנתי, ערכים מעוגלים; לא אומת מחדש מול הסדרה הרשמית). ב־<bdi>2025</bdi>: <bdi>2.6%</bdi> (דצמבר מול דצמבר, כפי שדווח בתקשורת).',
+         'מקור: הבנק העולמי (<bdi>FP.CPI.TOTL.ZG</bdi>), המבוסס על נתוני הלמ"ס: שינוי שנתי בממוצע מדד המחירים לצרכן. ב־<bdi>2025</bdi>: <bdi>3.0%</bdi>. קראתי את כל הסדרה, <bdi>1995</bdi>–<bdi>2024</bdi>.'),
+        ('נתונים מעוגלים להמחשה, על בסיס הלמ"ס ובנק ישראל. יש לאמת מספרים מדויקים לפני הגשה.',
+         'מחיר הדירה ב־<bdi>2024</bdi> רשמי (הלמ"ס, טבלה <bdi>2.2</bdi>: <bdi>2,340.3</bdi> אלף ש"ח). שאר נקודות המחיר והשכר מעוגלות להמחשה ולא אומתו; יש לאמת מול הלמ"ס.'),
+        ('נתוני המחירים והשכר מעוגלים להמחשה, יש לאמת מול הלמ"ס.',
+         'האינפלציה רשמית; מחיר <bdi>2024</bdi> רשמי; יתר נקודות המחיר והשכר מעוגלות ולא אומתו.'),
+    ]:
+        h = h.replace(old, new)
+    return h
+
+
+# ---------- source badges and one-line takeaways ----------
+def decorate(h):
+    def b(x, nd=1):
+        return f"<bdi>{x}</bdi>"
+    ratio0 = round(data["housing"][0]["price_kils"] * 1000 / data["housing"][0]["avg_wage"])
+    ratio1 = round(data["housing"][-1]["price_kils"] * 1000 / data["housing"][-1]["avg_wage"])
+    top, bot = tb["owner_occupied_pct"]
+    cfg = {
+        "אינפלציה": ("ok", "רשמי", "קצב עליית המחירים ירד מ־<bdi>5–11%</bdi> בשנה בשנות ה־90 לפחות מ־<bdi>2%</bdi> בכל אחת מהשנים <bdi>2012</bdi>–<bdi>2021</bdi>, ושב לעלות ב־<bdi>2022</bdi>."),
+        "דיור ושכר": ("est", "2024 רשמי, השאר מעוגל", f"ב־<bdi>2000</bdi> דירה ממוצעת שווה <b>{ratio0}</b> משכורות; ב־<bdi>2024</bdi> כבר <b>{ratio1}</b>: יותר מהכפלה."),
+        "שכירות": ("press", "דיווח על נתוני הלמ\"ס", f"גם מי שלא קנה דירה משלם יותר: מדד שכר הדירה עלה ב־<bdi>{r['housing_services_index_yoy_pct']}%</bdi> בשנה, מול אינפלציה של <bdi>{r['cpi_yoy_pct']}%</bdi>."),
+        "הוצאות משק הבית": ("ok", "רשמי", "דיור, תחבורה ותקשורת ומזון הם יחד כ־<b><bdi>61.8%</bdi></b> מההוצאה של משק בית ממוצע."),
+        "פערים": ("ok", "רשמי", f"הבית שבו גרים משנה הרבה: <b><bdi>{top}%</bdi></b> מהעשירון העליון בעלי דירה, לעומת <bdi>{bot}%</bdi> בתחתון."),
+        "ניתוח פייתון": ("est", "חישוב; נתונים חלקית מעוגלים", f"מ־<bdi>2000</bdi> עד <bdi>2024</bdi> הדירה התייקרה פי <b><bdi>{st['price_multiple']}</bdi></b> והשכר פי <bdi>{st['wage_multiple']}</bdi>, כשהמחירים הכלליים עלו פי <bdi>{st['cpi_multiple_2000_2024']}</bdi>."),
+        "מירוץ הדירה": ("mdl", "מודל להמחשה", f"ככל שהשנים עוברות, החיסכון למקדמה לוקח יותר זמן: מ־<b><bdi>{st['years_to_save_2000']}</bdi></b> שנים ב־<bdi>2000</bdi> ל־<b><bdi>{st['years_to_save_2024']}</bdi></b> ב־<bdi>2024</bdi>."),
+        "בהשוואה בינלאומית": ("press", "דיווחי תקשורת", "רמת המחירים בישראל גבוהה מממוצע ה־<bdi>OECD</bdi>, ובתחילת <bdi>2025</bdi> השכר עלה לאט מהמחירים."),
+        "מה אפשר לעשות": ("talk", "דיון", "שלושה מנופים בולטים: היצע דיור, תחרות בשוק המזון ותחבורה ציבורית."),
+    }
+    for title, (cls, label, take) in cfg.items():
+        pat = re.compile(r'(<section class="slide[^"]*"[^>]*data-title="' + re.escape(title) + r'"[^>]*>)(.*?)(</section>)', re.S)
+        m = pat.search(h)
+        assert m, title
+        body = m.group(2)
+        body = re.sub(r'<span class="badge[^>]*>.*?</span>', "", body)
+        body = re.sub(r'\s*<p class="take rv">.*?</p>', "", body, flags=re.S)
+        body = re.sub(r'(<div class="tag rv">.*?)(</div>)', lambda mm: mm.group(1) + f'<span class="badge {cls}">{label}</span>' + mm.group(2), body, count=1, flags=re.S)
+        body = re.sub(r'(<h2 class="rv">.*?</h2>)', lambda mm: mm.group(1) + f'\n  <p class="take rv">{take}</p>', body, count=1, flags=re.S)
+        h = h[:m.start()] + m.group(1) + body + m.group(3) + h[m.end():]
+    return h
+
+
+html = sync_core(html)
+html = decorate(html)
+
+# slide counter initial text
 n = len(re.findall(r'<section class="slide', html))
 html = re.sub(r'(id="counter">1 / )\d+', rf"\g<1>{n}", html)
 html_path.write_text(html, encoding="utf-8")

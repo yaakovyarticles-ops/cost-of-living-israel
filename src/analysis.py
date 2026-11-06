@@ -81,7 +81,7 @@ price_pts = {h["year"]: h["price_kils"] for h in housing}      # thousand NIS
 wage_pts = {h["year"]: h["avg_wage"] for h in housing}         # NIS / month
 SAVE_RATE, DOWN_PAYMENT = 0.20, 0.25   # model assumptions (illustrative)
 race_years = list(range(2000, 2025))
-race = {"years": race_years, "price_idx": [], "wage_idx": [], "cpi_idx": [],
+race = {"events": data.get("events", []), "years": race_years, "price_idx": [], "wage_idx": [], "cpi_idx": [],
         "price_k": [], "wage": [], "years_to_save": [],
         "assumptions": {"save_rate": SAVE_RATE, "down_payment": DOWN_PAYMENT}}
 for y in race_years:

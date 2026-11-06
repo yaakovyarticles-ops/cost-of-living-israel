@@ -1,12 +1,12 @@
 {
-  "cpi_multiple_2000_2024": 1.51,
+  "cpi_multiple_2000_2024": 1.52,
   "wage_multiple": 1.9,
-  "price_multiple": 3.83,
-  "real_wage_change_pct": 26.1,
-  "real_house_price_change_pct": 154.4,
+  "price_multiple": 3.9,
+  "real_wage_change_pct": 25.4,
+  "real_house_price_change_pct": 157.4,
   "salaries_to_buy_2000": 86,
-  "salaries_to_buy_2024": 173,
+  "salaries_to_buy_2024": 176,
   "worst_inflation_year": 2002,
   "years_to_save_2000": 8.9,
-  "years_to_save_2024": 18.0
+  "years_to_save_2024": 18.3
 }
