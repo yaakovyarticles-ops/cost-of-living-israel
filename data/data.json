@@ -1,0 +1,13 @@
+{
+  "_note": "Rounded illustrative figures (CBS / Bank of Israel based). Verify against official sources before citing.",
+  "inflation_pct": {"1995":8.1,"1996":10.6,"1997":7.0,"1998":8.6,"1999":1.3,"2000":0,"2001":1.4,"2002":6.5,"2003":-1.9,"2004":1.2,"2005":2.4,"2006":2.1,"2007":0.5,"2008":4.5,"2009":3.3,"2010":2.7,"2011":2.2,"2012":1.6,"2013":1.8,"2014":0.5,"2015":-1.0,"2016":-0.2,"2017":0.4,"2018":0.8,"2019":0.6,"2020":-0.6,"2021":1.5,"2022":5.3,"2023":3.0,"2024":3.2},
+  "housing": [
+    {"year":2000,"price_kils":600,"avg_wage":7000},
+    {"year":2005,"price_kils":780,"avg_wage":7600},
+    {"year":2010,"price_kils":1150,"avg_wage":8900},
+    {"year":2015,"price_kils":1550,"avg_wage":9900},
+    {"year":2020,"price_kils":1850,"avg_wage":11500},
+    {"year":2024,"price_kils":2300,"avg_wage":13300}
+  ],
+  "household_spending_pct": {"Housing":26,"Food":16,"Transport":14,"Education & culture":10,"Health":5,"Other":29}
+}
