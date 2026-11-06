@@ -63,3 +63,62 @@ fig.savefig(ROOT / "docs" / "charts" / "index_2000.png", facecolor=BG)
 (ROOT / "build" / "analysis.json").write_text(
     json.dumps(stats, indent=2, ensure_ascii=False), encoding="utf-8")
 print(json.dumps(stats, indent=2))
+
+
+# ---------------------------------------------------------------------------
+# Yearly series and a savings model, used by the animated "race" slide.
+# Price and wage points exist for 2000, 2005, 2010, 2015, 2020, 2024; the years
+# in between are linearly interpolated (an assumption, stated on the slide).
+def interp(points, year):
+    ys = sorted(points)
+    for a, b in zip(ys, ys[1:]):
+        if a <= year <= b:
+            t = (year - a) / (b - a)
+            return points[a] + (points[b] - points[a]) * t
+    return points[ys[-1]]
+
+price_pts = {h["year"]: h["price_kils"] for h in housing}      # thousand NIS
+wage_pts = {h["year"]: h["avg_wage"] for h in housing}         # NIS / month
+SAVE_RATE, DOWN_PAYMENT = 0.20, 0.25   # model assumptions (illustrative)
+race_years = list(range(2000, 2025))
+race = {"years": race_years, "price_idx": [], "wage_idx": [], "cpi_idx": [],
+        "price_k": [], "wage": [], "years_to_save": [],
+        "assumptions": {"save_rate": SAVE_RATE, "down_payment": DOWN_PAYMENT}}
+for y in race_years:
+    pr, wg = interp(price_pts, y), interp(wage_pts, y)
+    race["price_k"].append(round(pr))
+    race["wage"].append(round(wg))
+    race["price_idx"].append(round(pr / price_pts[2000] * 100, 1))
+    race["wage_idx"].append(round(wg / wage_pts[2000] * 100, 1))
+    race["cpi_idx"].append(round(cpi[y], 1))
+    # years of saving SAVE_RATE of the average wage to reach the down payment
+    race["years_to_save"].append(round(pr * 1000 * DOWN_PAYMENT / (wg * 12 * SAVE_RATE), 1))
+(ROOT / "build" / "race.json").write_text(json.dumps(race, ensure_ascii=False), encoding="utf-8")
+stats["years_to_save_2000"] = race["years_to_save"][0]
+stats["years_to_save_2024"] = race["years_to_save"][-1]
+(ROOT / "build" / "analysis.json").write_text(
+    json.dumps(stats, indent=2, ensure_ascii=False), encoding="utf-8")
+
+# Animated GIF of the same series (used in the README, which cannot run JS).
+from matplotlib.animation import FuncAnimation, PillowWriter
+fig2, ax2 = plt.subplots(figsize=(7.2, 4.0), dpi=110, facecolor=BG)
+ax2.set_facecolor(BG)
+ymax = max(race["price_idx"]) * 1.08
+def frame(k):
+    ax2.clear(); ax2.set_facecolor(BG)
+    ax2.set_xlim(2000, 2024); ax2.set_ylim(90, ymax)
+    for key, color, label in (("price_idx", "#ffc857", "Apartment price"),
+                              ("wage_idx", "#3ddbc4", "Average wage"),
+                              ("cpi_idx", "#ff6b6b", "Consumer prices")):
+        ax2.plot(race_years[:k + 1], race[key][:k + 1], color=color, lw=3, label=label)
+        ax2.scatter([race_years[k]], [race[key][k]], color=color, s=60, zorder=3)
+    ax2.set_title(f"{race_years[k]}  |  index 2000 = 100  |  years of saving for a down payment: "
+                  f"{race['years_to_save'][k]}", color=FG, fontsize=10, loc="left")
+    ax2.tick_params(colors=FG)
+    for sp in ax2.spines.values(): sp.set_color("#5f6491")
+    ax2.grid(axis="y", color="#5f6491", alpha=.3)
+    ax2.legend(frameon=False, labelcolor=FG, loc="upper left")
+def frame_hold(k): frame(min(k, len(race_years) - 1))
+anim = FuncAnimation(fig2, frame_hold, frames=len(race_years) + 6, interval=180)
+anim.save(ROOT / "docs" / "charts" / "race.gif", writer=PillowWriter(fps=6), savefig_kwargs={"facecolor": BG})
+print("race.json + race.gif written")

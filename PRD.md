@@ -11,9 +11,9 @@ Course instructor and classmates (AI course, semester A). Non-economists: the me
 |---|---|---|
 | R1 | Topic of personal interest | Cost of living / housing in Israel |
 | R2 | JavaScript: buttons and interaction | Prev/next buttons, dots, keyboard (RTL: ← forward), `#n` deep links, auto-play with `?auto` |
-| R3 | Python integrated into the presentation | `src/analysis.py` computes indices and draws a chart; `src/build.py` generates slides 4, 6, 7, 8 and 9 from `data/data.json` |
+| R3 | Python integrated into the presentation | `src/analysis.py` computes indices and draws a chart; `src/build.py` generates slides 4, 6, 7, 8, 9 and 10 from `data/data.json`; slide 8 is an animation whose data come from Python |
 | R4 | 3D element (Three.js) | 3D "data city" of 30 columns that morphs per slide, plus a CSS-3D cube with coins on the title slide |
-| R5 | Roughly 10 slides, not 30 | 10 slides |
+| R5 | Roughly 10 slides, not 30 | 11 slides |
 | R6 | Single self-contained HTML file | `index.html` (Three.js and fonts are embedded) |
 | R7 | GitHub: README with screenshots, PRD, prompts, several pushes | This repository |
 
@@ -25,9 +25,12 @@ Course instructor and classmates (AI course, semester A). Non-economists: the me
 5. Where household money goes, CBS Household Expenditure Survey 2023 (3D donut)
 6. Top vs bottom income decile: ownership, renting, rent paid *(Python-generated)*
 7. Python analysis: CPI vs wages vs apartment prices, 2000 = 100
-8. Israel vs OECD and wages vs prices *(Python-generated)*
-9. Possible levers, for discussion *(Python-generated)*
-10. Summary and the closing question
+8. Animated race of the three indices with a savings model: play/pause, scrubber, speed *(Python data, JS canvas)*
+9. Israel vs OECD and wages vs prices *(Python-generated)*
+10. Possible levers, for discussion *(Python-generated)*
+11. Summary and the closing question
+
+Every slide has its own 3D dataset and camera position in the Three.js scene behind the content.
 
 ## 5. Non-functional
 - RTL and BiDi: numbers and years wrapped in `<bdi>`.
@@ -41,4 +44,5 @@ Live data fetching, user accounts, mobile-specific layout, translation to other 
 ## 7. Acceptance checks
 - Open `index.html`: 10 slides, buttons and arrow keys navigate, no console errors.
 - `python src/analysis.py && python src/build.py` regenerates the generated slides idempotently (run twice: no diff).
-- Numbers on slide 7 equal `build/analysis.json`.
+- Numbers on slide 7 equal `build/analysis.json`; the race on slide 8 plays `build/race.json`.
+- Every inline script passes `node --check`; the console is empty on load.

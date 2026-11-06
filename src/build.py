@@ -8,6 +8,7 @@ Generated blocks
   rent       slide: rents by city (from data.json)
   deciles    slide: top vs bottom income decile (from data.json)
   analysis   slide: indices chart + numbers computed by analysis.py
+  race       slide: animated race of the three indices + savings model (Python JSON, JS canvas)
   oecd       slide: international comparison and wages
   policy     slide: levers (qualitative)
 """
@@ -47,6 +48,12 @@ css = """<style>
 .bigstats .stat span{display:block;margin-top:.6em}
 .levers{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4vw;margin-top:1.2em}
 .levers .glass{padding:1.2em 1.4em}.levers h3{margin:0 0 .4em}.levers p{margin:0}
+#raceCv{width:100%;height:clamp(220px,36vh,340px);display:block}
+.rctl{display:flex;align-items:center;gap:.8em;margin-top:.7em;direction:ltr}
+.rctl input[type=range]{flex:1;accent-color:#ffc857}
+.rbtn,.rctl select{background:rgba(255,255,255,.1);color:inherit;border:1px solid rgba(255,255,255,.18);border-radius:.7em;padding:.3em .8em;font:inherit;cursor:pointer}
+.rbtn:hover,.rctl select:hover{background:rgba(255,255,255,.18)}
+.rread b.big{font-size:2.1em;line-height:1}
 </style>"""
 
 # ---------- rent ----------
@@ -57,7 +64,7 @@ he_city = {"Tel Aviv": "תל אביב", "Jerusalem": "ירושלים", "National
 rows = "".join(bar_row(he_city[n], v, vmax, fmt(v), "#ff6b6b" if n == "National average" else "#ffc857")
                for n, v in r["items"])
 rent = f"""<!--PY:rent:START-->
-<section class="slide" data-title="שכירות" data-set="2">
+<section class="slide" data-title="שכירות" data-set="5">
   <div class="tag rv">פרק ב · שכירות</div>
   <h2 class="rv">מי שלא קנה, <em>שוכר</em> ביוקר</h2>
   <div class="cols">
@@ -85,7 +92,7 @@ def pair_rows(label, key, vmax):
             + bar_row("עשירון תחתון", bot, vmax, f"{bot}%", "#ff6b6b") + "</div>")
 dec_rows = pair_rows("גרים בדירה בבעלותם", "owner_occupied_pct", 100) + pair_rows("גרים בדירה שכורה", "renting_pct", 100)
 deciles = f"""<!--PY:deciles:START-->
-<section class="slide" data-title="פערים" data-set="3">
+<section class="slide" data-title="פערים" data-set="6">
   <div class="tag rv">פרק ג · פערים</div>
   <h2 class="rv">לא כולם מרגישים <em>אותו דבר</em></h2>
   <div class="cols">
@@ -117,10 +124,35 @@ analysis = f"""<!--PY:analysis:START-->
 </section>
 <!--PY:analysis:END-->"""
 
+
+# ---------- race (animated; Python computes the data, JS draws it) ----------
+race_data = (ROOT / "build" / "race.json").read_text(encoding="utf-8")
+race_js = (ROOT / "src" / "race.js").read_text(encoding="utf-8")
+race = f"""<!--PY:race:START-->
+<section class="slide" id="raceSlide" data-title="מירוץ הדירה" data-set="4">
+  <div class="tag rv">פרק ד · אנימציה שחושבה ב־Python</div>
+  <h2 class="rv">המירוץ: <em>דירה מול משכורת</em></h2>
+  <div class="cols">
+    <div class="chart-box glass rv">
+      <canvas id="raceCv" role="img" aria-label="אנימציה: מדד מחיר דירה, שכר ומחירים 2000 עד 2024"></canvas>
+      <div class="rctl"><button class="rbtn" id="rPlay" aria-label="השהיה">⏸</button><input id="rRange" type="range" min="0" max="1000" value="0" aria-label="שנה"><select id="rSpeed" aria-label="מהירות"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="2">×2</option></select></div>
+    </div>
+    <ul class="points rv rread">
+      <li><span class="ic">◷</span><span>שנת <b class="big num" id="rYear">2000</b></span></li>
+      <li><span class="ic">%</span><span>מדד (<bdi>2000 = 100</bdi>): דירה <b class="num" id="rPrice">100</b>, שכר <b class="num" id="rWage">100</b>, מחירים <b class="num" id="rCpi">100</b></span></li>
+      <li><span class="ic">⌛</span><span>שנות חיסכון למקדמה: <b class="big num" id="rSave">{st['years_to_save_2000']}</b></span></li>
+    </ul>
+  </div>
+  <div class="src">מודל המחשה (<bdi>src/analysis.py</bdi>): חיסכון של <bdi>20%</bdi> מהשכר הממוצע עד מקדמה של <bdi>25%</bdi> ממחיר דירה ממוצעת. השנים שבין נקודות הנתונים מושלמות בקו ישר, והנתונים מעוגלים: זו המחשה ולא מדידה.</div>
+  <script type="application/json" id="raceData">{race_data}</script>
+  <script>{race_js}</script>
+</section>
+<!--PY:race:END-->"""
+
 # ---------- oecd ----------
 o = data["oecd_and_wages"]
 oecd = f"""<!--PY:oecd:START-->
-<section class="slide" data-title="בהשוואה בינלאומית" data-set="4">
+<section class="slide" data-title="בהשוואה בינלאומית" data-set="7">
   <div class="tag rv">פרק ה · בהשוואה</div>
   <h2 class="rv">מחירים גבוהים, <em>שכר שרץ אחריהם</em></h2>
   <div class="bigstats rv">
@@ -167,7 +199,8 @@ put("css", css, "</head>")
 put("rent", rent, "<!-- 4 -->")
 put("analysis", analysis, "<!-- 5 -->")
 put("deciles", deciles, "<!--PY:analysis:START-->")
-put("oecd", oecd, "<!--PY:analysis:END-->", before=False)
+put("race", race, "<!--PY:analysis:END-->", before=False)
+put("oecd", oecd, "<!--PY:race:END-->", before=False)
 put("policy", policy, "<!--PY:oecd:END-->", before=False)
 
 # slide counter initial text
