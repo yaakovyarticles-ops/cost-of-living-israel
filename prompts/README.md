@@ -10,5 +10,6 @@ Prompts are listed in the order they were given to the LLM (Claude Code), each w
 | [03-data-and-new-slides.md](03-data-and-new-slides.md) | Official data, four more slides |
 | [04-animations-and-3d.md](04-animations-and-3d.md) | New 3D datasets, Python-driven animation, bug found by syntax check |
 | [05-clarity-and-data.md](05-clarity-and-data.md) | Badges, takeaways, event markers, official CPI series |
+| [06-summary-and-mobile.md](06-summary-and-mobile.md) | What-if calculator summary, mobile layout, swipe direction |
 
 Note: prompt log 00 is copied from the session transcript of 28/10/2026 and is verbatim; logs 01–03 describe this later session and summarise the prompts and results.

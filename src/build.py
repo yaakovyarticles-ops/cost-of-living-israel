@@ -13,6 +13,7 @@ Generated blocks
   policy     slide: levers (qualitative)
 """
 import base64
+import re
 import json
 from pathlib import Path
 
@@ -57,6 +58,25 @@ css = """<!--PY:css:START--><style>
 .badge{display:inline-block;margin-inline-start:.9em;padding:.12em .7em;border-radius:2em;font-size:.82em;font-weight:700;border:1px solid currentColor;vertical-align:middle;letter-spacing:.01em}
 .badge.ok{color:#3ddbc4;background:rgba(61,219,196,.12)}.badge.press{color:#ffc857;background:rgba(255,200,87,.12)}
 .badge.est{color:#ff8f8f;background:rgba(255,107,107,.12)}.badge.mdl{color:#b3a8ff;background:rgba(139,124,255,.14)}.badge.talk{color:#c9ccea;background:rgba(255,255,255,.08)}
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2vw;margin:.6em 0 .2em}
+.chip{display:flex;align-items:baseline;gap:.7em;padding:.5em 1em}.chip b{font-size:1.9em;line-height:1}.chip span{font-size:.92em;opacity:.9}
+.calc h3{margin:0 0 .4em;font-size:1em}.crow{display:grid;grid-template-columns:8.6em 1fr 3.6em;align-items:center;gap:.7em;margin:.25em 0;font-size:.92em;direction:rtl}
+.crow input{direction:ltr;accent-color:#ffc857;width:100%}.crow b{text-align:start;direction:ltr}
+.cbars{margin-top:.7em}.cbar{display:grid;grid-template-columns:6.4em 1fr 3em;align-items:center;gap:.6em;margin:.3em 0;font-size:.92em}
+.cbar .bt{display:block;height:1em;border-radius:.6em;background:rgba(255,255,255,.07);overflow:hidden;direction:rtl}.cbar .bt i{display:block;height:100%;border-radius:.6em;transition:width .25s}
+.cnote{margin-top:.5em;font-size:.9em;line-height:1.4}.cnote .rbtn{padding:.1em .7em;font-size:.9em;margin-inline-start:.5em}.cnote b{color:#ffc857}
+.levels li{align-items:flex-start;font-size:.95em}.levels b{color:#ffc857}
+html{touch-action:pan-y}
+@media(max-width:860px){
+ .bigstats,.levers{grid-template-columns:1fr}.bigstats .stat b{font-size:2.3em}
+ .brow{grid-template-columns:5.4em 1fr 3.5em;font-size:.95em;gap:.5em}
+ .crow{grid-template-columns:6.6em 1fr 3em;gap:.5em}.cbar{grid-template-columns:5.6em 1fr 2.6em}
+ #raceCv{height:230px}.rctl{gap:.5em}
+ .take{font-size:1em;margin:.3em 0 .6em}.badge{display:block;margin:.5em 0 0;width:fit-content}
+ .src{font-size:.78em;padding:.5em .7em}
+ .slide>*{flex-shrink:0}.dots{display:none}.controls{gap:.9rem}
+ .levels li,.points li{font-size:.98em}
+}
 .take{margin:.2em 0 .5em;max-width:46em;font-size:1.08em;line-height:1.5;color:rgba(233,236,255,.86)}
 .take b{color:#ffc857}
 .src{background:rgba(10,12,32,.66);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);padding:.4em .9em;border-radius:.7em;color:rgba(233,236,255,.86)!important}
@@ -171,11 +191,45 @@ oecd = f"""<!--PY:oecd:START-->
 </section>
 <!--PY:oecd:END-->"""
 
+
+# ---------- summary: recap + what-if calculator + three levels of action ----------
+calc_data = json.dumps({"price": data["housing"][-1]["price_kils"], "wage": data["housing"][-1]["avg_wage"],
+                        "years2000": st["years_to_save_2000"], "years2024": st["years_to_save_2024"]})
+summary_js = (ROOT / "src" / "summary.js").read_text(encoding="utf-8")
+summary = f"""<!--PY:summary:START-->
+<section class="slide" id="sumSlide" data-title="סיכום" data-set="8">
+  <div class="tag rv">סיכום</div>
+  <h2 class="rv">מה למדנו <em>ומה אפשר לעשות?</em></h2>
+  <div class="cols">
+    <div class="chart-box glass rv calc">
+      <h3>מחשבון "מה אם": שנות חיסכון למקדמה</h3>
+      <div class="crow"><label for="cRate">חיסכון מהשכר</label><input id="cRate" type="range" min="5" max="50" value="20"><b id="cRateV">20%</b></div>
+      <div class="crow"><label for="cDown">גובה המקדמה</label><input id="cDown" type="range" min="10" max="50" value="25"><b id="cDownV">25%</b></div>
+      <div class="crow"><label for="cWage">עליית שכר ריאלית</label><input id="cWage" type="range" min="0" max="60" value="0"><b id="cWageV">+0%</b></div>
+      <div class="cbars">
+        <div class="cbar"><span>2000</span><span class="bt"><i id="cB0" style="background:#3ddbc4"></i></span><b class="num"><bdi>{st['years_to_save_2000']}</bdi></b></div>
+        <div class="cbar"><span>2024</span><span class="bt"><i id="cB1" style="background:#ff6b6b"></i></span><b class="num"><bdi>{st['years_to_save_2024']}</bdi></b></div>
+        <div class="cbar"><span>התרחיש שלך</span><span class="bt"><i id="cB2" style="background:#ffc857"></i></span><b class="num" id="cV2">0</b></div>
+      </div>
+      <div class="cnote"><b class="num" id="cYears">0</b> שנים בתרחיש; לחזור ל־<bdi>{st['years_to_save_2000']}</bdi> של <bdi>2000</bdi> דורש חיסכון של <b class="num" id="cNeed">0%</b> מהשכר. <button class="rbtn" id="cReset">איפוס</button></div>
+    </div>
+    <ul class="points rv levels">
+      <li><span class="ic">🏠</span><span><b>המשפחה:</b> לחסוך מוקדם ולהשוות עלות חודשית של שכירות מול משכנתא.</span></li>
+      <li><span class="ic">🏗</span><span><b>השוק:</b> יותר היצע דירות ותחרות במזון (<bdi>25.3%</bdi> ו־<bdi>17.9%</bdi> מההוצאה).</span></li>
+      <li><span class="ic">🏛</span><span><b>המדינה:</b> תחבורה ציבורית, הגנה על שוכרים (<bdi>55.4%</bdi> בעשירון התחתון) ותמיכה בדיור ראשון.</span></li>
+    </ul>
+  </div>
+  <div class="src">המחשבון הוא מודל להמחשה: מחיר דירה <bdi>2024</bdi> רשמי (הלמ"ס), שכר מעוגל, והנחות המודל לפי הסליידרים. כיוונים לדיון, לא המלצות מדיניות מבוססות מחקר.</div>
+  <script type="application/json" id="calcData">{calc_data}</script>
+  <script>{summary_js}</script>
+</section>
+<!--PY:summary:END-->"""
+
 # ---------- policy ----------
 policy = """<!--PY:policy:START-->
 <section class="slide" data-title="מה אפשר לעשות" data-set="4">
-  <div class="tag rv">פרק ו · כיוונים</div>
-  <h2 class="rv">מה אפשר <em>לעשות?</em></h2>
+  <div class="tag rv">פרק ו · מדיניות</div>
+  <h2 class="rv">מנופים של <em>המדינה והשוק</em></h2>
   <div class="levers rv">
     <div class="glass"><h3>להגדיל היצע</h3><p>קצב תכנון ובנייה גבוה יותר: דיור הוא <bdi>25.3%</bdi> מהוצאות משק הבית.</p></div>
     <div class="glass"><h3>לחזק תחרות</h3><p>פחות חסמים ליבוא ולרשתות קטנות במזון, שהוא <bdi>17.9%</bdi> מההוצאה.</p></div>
@@ -209,6 +263,11 @@ put("deciles", deciles, "<!--PY:analysis:START-->")
 put("race", race, "<!--PY:analysis:END-->", before=False)
 put("oecd", oecd, "<!--PY:race:END-->", before=False)
 put("policy", policy, "<!--PY:oecd:END-->", before=False)
+if "<!--PY:summary:START-->" not in html:
+    m = re.search(r'<section class="slide[^"]*"[^>]*data-title="סיכום"[^>]*>.*?</section>', html, re.S)
+    assert m, "static summary slide not found"
+    html = html[:m.start()] + "<!--PY:summary:START--><!--PY:summary:END-->" + html[m.end():]
+put("summary", summary, "<!--PY:summary:END-->")
 
 
 # ---------- sync the hard-coded chart data inside index.html with data.json ----------
@@ -264,7 +323,8 @@ def decorate(h):
         "ניתוח פייתון": ("est", "חישוב; נתונים חלקית מעוגלים", f"מ־<bdi>2000</bdi> עד <bdi>2024</bdi> הדירה התייקרה פי <b><bdi>{st['price_multiple']}</bdi></b> והשכר פי <bdi>{st['wage_multiple']}</bdi>, כשהמחירים הכלליים עלו פי <bdi>{st['cpi_multiple_2000_2024']}</bdi>."),
         "מירוץ הדירה": ("mdl", "מודל להמחשה", f"ככל שהשנים עוברות, החיסכון למקדמה לוקח יותר זמן: מ־<b><bdi>{st['years_to_save_2000']}</bdi></b> שנים ב־<bdi>2000</bdi> ל־<b><bdi>{st['years_to_save_2024']}</bdi></b> ב־<bdi>2024</bdi>."),
         "בהשוואה בינלאומית": ("press", "דיווחי תקשורת", "רמת המחירים בישראל גבוהה מממוצע ה־<bdi>OECD</bdi>, ובתחילת <bdi>2025</bdi> השכר עלה לאט מהמחירים."),
-        "מה אפשר לעשות": ("talk", "דיון", "שלושה מנופים בולטים: היצע דיור, תחרות בשוק המזון ותחבורה ציבורית."),
+        "מה אפשר לעשות": ("talk", "דיון", "ארבעה מנופים בולטים של המדינה והשוק: היצע דיור, תחרות בשוק המזון, תחבורה ציבורית והגנה על שוכרים."),
+        "סיכום": ("mdl", "מחשבון להמחשה", "האם הדור הבא יוכל לקנות דירה? זה תלוי במה נחליט לעשות עכשיו. נסו במחשבון מה צריך להשתנות."),
     }
     for title, (cls, label, take) in cfg.items():
         pat = re.compile(r'(<section class="slide[^"]*"[^>]*data-title="' + re.escape(title) + r'"[^>]*>)(.*?)(</section>)', re.S)

@@ -202,6 +202,25 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
 .badge{display:inline-block;margin-inline-start:.9em;padding:.12em .7em;border-radius:2em;font-size:.82em;font-weight:700;border:1px solid currentColor;vertical-align:middle;letter-spacing:.01em}
 .badge.ok{color:#3ddbc4;background:rgba(61,219,196,.12)}.badge.press{color:#ffc857;background:rgba(255,200,87,.12)}
 .badge.est{color:#ff8f8f;background:rgba(255,107,107,.12)}.badge.mdl{color:#b3a8ff;background:rgba(139,124,255,.14)}.badge.talk{color:#c9ccea;background:rgba(255,255,255,.08)}
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2vw;margin:.6em 0 .2em}
+.chip{display:flex;align-items:baseline;gap:.7em;padding:.5em 1em}.chip b{font-size:1.9em;line-height:1}.chip span{font-size:.92em;opacity:.9}
+.calc h3{margin:0 0 .4em;font-size:1em}.crow{display:grid;grid-template-columns:8.6em 1fr 3.6em;align-items:center;gap:.7em;margin:.25em 0;font-size:.92em;direction:rtl}
+.crow input{direction:ltr;accent-color:#ffc857;width:100%}.crow b{text-align:start;direction:ltr}
+.cbars{margin-top:.7em}.cbar{display:grid;grid-template-columns:6.4em 1fr 3em;align-items:center;gap:.6em;margin:.3em 0;font-size:.92em}
+.cbar .bt{display:block;height:1em;border-radius:.6em;background:rgba(255,255,255,.07);overflow:hidden;direction:rtl}.cbar .bt i{display:block;height:100%;border-radius:.6em;transition:width .25s}
+.cnote{margin-top:.5em;font-size:.9em;line-height:1.4}.cnote .rbtn{padding:.1em .7em;font-size:.9em;margin-inline-start:.5em}.cnote b{color:#ffc857}
+.levels li{align-items:flex-start;font-size:.95em}.levels b{color:#ffc857}
+html{touch-action:pan-y}
+@media(max-width:860px){
+ .bigstats,.levers{grid-template-columns:1fr}.bigstats .stat b{font-size:2.3em}
+ .brow{grid-template-columns:5.4em 1fr 3.5em;font-size:.95em;gap:.5em}
+ .crow{grid-template-columns:6.6em 1fr 3em;gap:.5em}.cbar{grid-template-columns:5.6em 1fr 2.6em}
+ #raceCv{height:230px}.rctl{gap:.5em}
+ .take{font-size:1em;margin:.3em 0 .6em}.badge{display:block;margin:.5em 0 0;width:fit-content}
+ .src{font-size:.78em;padding:.5em .7em}
+ .slide>*{flex-shrink:0}.dots{display:none}.controls{gap:.9rem}
+ .levels li,.points li{font-size:.98em}
+}
 .take{margin:.2em 0 .5em;max-width:46em;font-size:1.08em;line-height:1.5;color:rgba(233,236,255,.86)}
 .take b{color:#ffc857}
 .src{background:rgba(10,12,32,.66);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);padding:.4em .9em;border-radius:.7em;color:rgba(233,236,255,.86)!important}
@@ -462,9 +481,9 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
 
 <!--PY:policy:START-->
 <section class="slide" data-title="מה אפשר לעשות" data-set="4">
-  <div class="tag rv">פרק ו · כיוונים<span class="badge talk">דיון</span></div>
-  <h2 class="rv">מה אפשר <em>לעשות?</em></h2>
-  <p class="take rv">שלושה מנופים בולטים: היצע דיור, תחרות בשוק המזון ותחבורה ציבורית.</p>
+  <div class="tag rv">פרק ו · מדיניות<span class="badge talk">דיון</span></div>
+  <h2 class="rv">מנופים של <em>המדינה והשוק</em></h2>
+  <p class="take rv">ארבעה מנופים בולטים של המדינה והשוק: היצע דיור, תחרות בשוק המזון, תחבורה ציבורית והגנה על שוכרים.</p>
   <div class="levers rv">
     <div class="glass"><h3>להגדיל היצע</h3><p>קצב תכנון ובנייה גבוה יותר: דיור הוא <bdi>25.3%</bdi> מהוצאות משק הבית.</p></div>
     <div class="glass"><h3>לחזק תחרות</h3><p>פחות חסמים ליבוא ולרשתות קטנות במזון, שהוא <bdi>17.9%</bdi> מההוצאה.</p></div>
@@ -476,16 +495,57 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
 <!--PY:policy:END-->
 
 <!-- 5 -->
-<section class="slide" data-title="סיכום" data-set="4">
-  <div class="tag rv">סיכום</div>
-  <h2 class="rv">מה למדנו <em>ומה הלאה?</em></h2>
-  <div class="sum-grid rv">
-    <div class="glass"><h3>מחירים</h3><p>האינפלציה נרגעה בשנות ה־<bdi>2000</bdi>, אך התחזקה שוב אחרי המגפה והמלחמות.</p></div>
-    <div class="glass"><h3>דיור</h3><p>המשבר האמיתי הוא יחס מחיר־שכר: הדירה כמעט ״כפולה״ ביחס להכנסה.</p></div>
-    <div class="glass"><h3>מדיניות</h3><p>הגדלת היצע, תחרות בשוק המזון ותחבורה ציבורית הם המנופים העיקריים.</p></div>
+<!--PY:summary:START-->
+<section class="slide" id="sumSlide" data-title="סיכום" data-set="8">
+  <div class="tag rv">סיכום<span class="badge mdl">מחשבון להמחשה</span></div>
+  <h2 class="rv">מה למדנו <em>ומה אפשר לעשות?</em></h2>
+  <p class="take rv">האם הדור הבא יוכל לקנות דירה? זה תלוי במה נחליט לעשות עכשיו. נסו במחשבון מה צריך להשתנות.</p>
+  <div class="cols">
+    <div class="chart-box glass rv calc">
+      <h3>מחשבון "מה אם": שנות חיסכון למקדמה</h3>
+      <div class="crow"><label for="cRate">חיסכון מהשכר</label><input id="cRate" type="range" min="5" max="50" value="20"><b id="cRateV">20%</b></div>
+      <div class="crow"><label for="cDown">גובה המקדמה</label><input id="cDown" type="range" min="10" max="50" value="25"><b id="cDownV">25%</b></div>
+      <div class="crow"><label for="cWage">עליית שכר ריאלית</label><input id="cWage" type="range" min="0" max="60" value="0"><b id="cWageV">+0%</b></div>
+      <div class="cbars">
+        <div class="cbar"><span>2000</span><span class="bt"><i id="cB0" style="background:#3ddbc4"></i></span><b class="num"><bdi>8.9</bdi></b></div>
+        <div class="cbar"><span>2024</span><span class="bt"><i id="cB1" style="background:#ff6b6b"></i></span><b class="num"><bdi>18.3</bdi></b></div>
+        <div class="cbar"><span>התרחיש שלך</span><span class="bt"><i id="cB2" style="background:#ffc857"></i></span><b class="num" id="cV2">0</b></div>
+      </div>
+      <div class="cnote"><b class="num" id="cYears">0</b> שנים בתרחיש; לחזור ל־<bdi>8.9</bdi> של <bdi>2000</bdi> דורש חיסכון של <b class="num" id="cNeed">0%</b> מהשכר. <button class="rbtn" id="cReset">איפוס</button></div>
+    </div>
+    <ul class="points rv levels">
+      <li><span class="ic">🏠</span><span><b>המשפחה:</b> לחסוך מוקדם ולהשוות עלות חודשית של שכירות מול משכנתא.</span></li>
+      <li><span class="ic">🏗</span><span><b>השוק:</b> יותר היצע דירות ותחרות במזון (<bdi>25.3%</bdi> ו־<bdi>17.9%</bdi> מההוצאה).</span></li>
+      <li><span class="ic">🏛</span><span><b>המדינה:</b> תחבורה ציבורית, הגנה על שוכרים (<bdi>55.4%</bdi> בעשירון התחתון) ותמיכה בדיור ראשון.</span></li>
+    </ul>
   </div>
-  <p class="big-q rv">האם הדור הבא יוכל לקנות דירה?</p>
+  <div class="src">המחשבון הוא מודל להמחשה: מחיר דירה <bdi>2024</bdi> רשמי (הלמ"ס), שכר מעוגל, והנחות המודל לפי הסליידרים. כיוונים לדיון, לא המלצות מדיניות מבוססות מחקר.</div>
+  <script type="application/json" id="calcData">{"price": 2340.3, "wage": 13300, "years2000": 8.9, "years2024": 18.3}</script>
+  <script>(function(){
+  var root=document.getElementById("sumSlide");if(!root)return;
+  var C=JSON.parse(document.getElementById("calcData").textContent);
+  var el=function(i){return document.getElementById(i)};
+  var rate=el("cRate"),down=el("cDown"),wage=el("cWage");
+  function calc(){
+    var r=+rate.value/100,d=+down.value/100,w=1+(+wage.value)/100;
+    var years=C.price*1000*d/(C.wage*w*12*r);
+    el("cRateV").textContent=rate.value+"%";el("cDownV").textContent=down.value+"%";el("cWageV").textContent="+"+wage.value+"%";
+    el("cYears").textContent=years.toFixed(1);el("cV2").textContent=years.toFixed(1);
+    var need=C.price*1000*d/(C.wage*w*12*C.years2000)*100;
+    el("cNeed").textContent=need.toFixed(0)+"%";
+    var max=Math.max(C.years2024*1.12,years*1.08,C.years2000*1.1);
+    el("cB0").style.width=(C.years2000/max*100)+"%";el("cB1").style.width=(C.years2024/max*100)+"%";el("cB2").style.width=Math.max(years/max*100,1)+"%";
+    el("cB2").style.background=years<=C.years2000*1.001?"#3ddbc4":"#ffc857";
+    if(window.__scn)window.__scn(years);
+  }
+  [rate,down,wage].forEach(function(n){n.addEventListener("input",calc);n.addEventListener("keydown",function(e){e.stopPropagation()})});
+  el("cReset").addEventListener("click",function(){rate.value=20;down.value=25;wage.value=0;calc();this.blur()});
+  calc();
+  new MutationObserver(function(){if(root.classList.contains("active"))calc()}).observe(root,{attributes:true,attributeFilter:["class"]});
+})();
+</script>
 </section>
+<!--PY:summary:END-->
 
 </main>
 
@@ -579,9 +639,16 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
       if(j<3)S[7].push({x:intX[j],w:2.4,b:0,t:Math.max(intV[j]/40*HMAX*.95,.18),c:col(intC[j])});
       else S[7].push({x:baseX(j),w:.1,b:0,t:0,c:col(0x5f6491)});
     }
+    /* 8: years of saving for a down payment: 2000, 2024, and the live scenario from the calculator */
+    var yV=[8.9,18.3,18.3],yX=[5.2,0,-5.2],yC=[0x3ddbc4,0xff6b6b,0xffc857];
+    S[8]=[];for(j=0;j<NC;j++){
+      if(j<3)S[8].push({x:yX[j],w:2.4,b:0,t:Math.max(yV[j]/20*HMAX*.92,.15),c:col(yC[j])});
+      else S[8].push({x:baseX(j),w:.1,b:0,t:0,c:col(0x5f6491)});
+    }
     return S;
   }
   var SETS=makeSets();
+  window.__scn=function(v){SETS[8][2].t=Math.max(Math.min(v,24)/20*HMAX*.92,.15)};
   var CAPS=["העמודות: רמת המחירים המצטברת 1995–2024 (חישוב מהאינפלציה השנתית)",
             "העמודות: האינפלציה השנתית (%)",
             "העמודות: דירה ממוצעת במספר משכורות (2000–2024, בין נקודות הנתונים משוער)",
@@ -589,7 +656,8 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
             "העמודות: רמת המחירים המצטברת, 1995–2024",
             "העמודות: שכר דירה חודשי לדירת 4 חדרים, רבעון 3 של 2024 (הלמ\"ס)",
             "העמודות: גרים בבעלות / בשכירות, עשירון עליון מול תחתון, 2023 (%)",
-            "העמודות: פער מחירים מול ה־OECD (%) ועליית השכר הריאלי ב־2024"];
+            "העמודות: פער מחירים מול ה־OECD (%) ועליית השכר הריאלי ב־2024",
+            "העמודות: שנות חיסכון למקדמה, 2000 מול 2024 מול התרחיש במחשבון"];
 
   var geo=new THREE.BoxGeometry(1,1,1);
   var mat=new THREE.MeshStandardMaterial({metalness:.3,roughness:.4,transparent:true,opacity:.78});
@@ -649,9 +717,9 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
   var cap=document.getElementById("cap3d");
 
   /* per-slide camera + hero */
-  var CAMS=[{az:-.38,h:4.2,r:19,hero:1},{az:.18,h:3.4,r:19,hero:0},{az:-.2,h:3.8,r:19,hero:0},{az:0,h:4.6,r:17,hero:0},{az:.42,h:3.2,r:21,hero:.0},{az:-.32,h:3.5,r:19,hero:0},{az:.3,h:3.9,r:18,hero:0},{az:-.12,h:4.4,r:17,hero:0}];
+  var CAMS=[{az:-.38,h:4.2,r:19,hero:1},{az:.18,h:3.4,r:19,hero:0},{az:-.2,h:3.8,r:19,hero:0},{az:0,h:4.6,r:17,hero:0},{az:.42,h:3.2,r:21,hero:.0},{az:-.32,h:3.5,r:19,hero:0},{az:.3,h:3.9,r:18,hero:0},{az:-.12,h:4.4,r:17,hero:0},{az:.1,h:3.6,r:17.5,hero:0}];
   var tgtSet=0,cs={az:CAMS[0].az,h:CAMS[0].h,r:CAMS[0].r,hero:1},mx=0,my=0;
-  window.__t3={set:function(i){var ch=Math.max(0,Math.min(7,i))!==tgtSet;if(ch&&window.__armed)burst(i>tgtSet?-1:1);tgtSet=Math.max(0,Math.min(7,i));if(cap)cap.textContent=CAPS[tgtSet]}};
+  window.__t3={set:function(i){var ch=Math.max(0,Math.min(8,i))!==tgtSet;if(ch&&window.__armed)burst(i>tgtSet?-1:1);tgtSet=Math.max(0,Math.min(8,i));if(cap)cap.textContent=CAPS[tgtSet]}};
   if(window.__cur!=null)window.__t3.set(window.__cur);else if(cap)cap.textContent=CAPS[0];
   document.addEventListener("mousemove",function(e){mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
 
@@ -832,7 +900,7 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
   }
   var wipeEl=document.getElementById("wipe");
   function playWipe(dir){
-    wipeEl.className="";void wipeEl.offsetWidth;wipeEl.className=dir>0?"go-next":"go-prev";
+    wipeEl.className="";void wipeEl.offsetWidth;wipeEl.className=((window.__flip?-dir:dir)>0)?"go-next":"go-prev";
   }
   var slides=[].slice.call(document.querySelectorAll(".slide")),cur=0,N=slides.length;
   var dots=document.getElementById("dots"),counter=document.getElementById("counter"),prog=document.getElementById("progress");
@@ -861,12 +929,16 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
   });
   function toggleFull(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()}
   document.getElementById("full").onclick=toggleFull;
-  /* swipe: swipe right-to-left = next (RTL-aware) */
-  var sx=null;
-  document.addEventListener("touchstart",function(e){sx=e.touches[0].clientX},{passive:true});
+  
+var sx=null,sy=null;
+  /* swipe: finger moves right = next, left = previous (RTL book-style: the next slide is to the left) */
+  document.addEventListener("touchstart",function(e){
+    var el=e.target;if(el.closest&&el.closest("input,select,textarea,button,a")){sx=null;return}
+    sx=e.touches[0].clientX;sy=e.touches[0].clientY;
+  },{passive:true});
   document.addEventListener("touchend",function(e){
-    if(sx==null)return;var dx=e.changedTouches[0].clientX-sx;
-    if(Math.abs(dx)>60)go(cur+(dx<0?1:-1));sx=null;
+    if(sx==null)return;var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;sx=null;
+    if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.4){window.__flip=true;go(cur+(dx>0?1:-1));window.__flip=false}
   });
   /* trackpad two-finger swipe, both directions.
      fingers right-to-left (deltaX>0) = next, left-to-right (deltaX<0) = previous */

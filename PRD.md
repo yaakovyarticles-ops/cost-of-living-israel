@@ -27,8 +27,8 @@ Course instructor and classmates (AI course, semester A). Non-economists: the me
 7. Python analysis: CPI vs wages vs apartment prices, 2000 = 100
 8. Animated race of the three indices with a savings model: play/pause, scrubber, speed *(Python data, JS canvas)*
 9. Israel vs OECD and wages vs prices *(Python-generated)*
-10. Possible levers, for discussion *(Python-generated)*
-11. Summary and the closing question
+10. Levers for the state and the market, for discussion *(Python-generated)*
+11. Summary: recap, an interactive what-if calculator (savings rate, down payment, wage growth) and three levels of action (family, market, state) *(Python-generated, JS calculator)*
 
 Every slide has its own 3D dataset and camera position in the Three.js scene behind the content.
 
@@ -38,6 +38,9 @@ Every slide has its own 3D dataset and camera position in the Three.js scene beh
 - Readable at 1600×900; navigation works with keyboard and mouse.
 - Data provenance is stated on every slide with a badge (official / press report / rounded / model / discussion) and a source line: the CPI series, the 2024 dwelling price and the CBS 2023 survey are official; rents, OECD and wage-growth figures come from press reports; the 2000–2020 apartment prices and all wage points are rounded and unverified (`data/data.json` → `sources`).
 - Each content slide has a one-sentence takeaway under the title, and footnotes sit on a translucent plate so they stay legible over the 3D scene.
+
+## 5b. Mobile
+- Responsive layout at phone width; swipe finger right = next, left = previous; swipes ignore sliders/buttons and vertical scrolling.
 
 ## 6. Out of scope
 Live data fetching, user accounts, mobile-specific layout, translation to other languages.
