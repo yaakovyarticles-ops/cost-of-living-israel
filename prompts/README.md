@@ -4,8 +4,9 @@ Prompts are listed in the order they were given to the LLM (Claude Code), each w
 
 | File | Stage |
 |---|---|
+| [00-original-deck-session.md](00-original-deck-session.md) | The original deck: all user prompts of the 28/10/2026 session, verbatim |
 | [01-assignment-analysis.md](01-assignment-analysis.md) | Reading the lecture summary and the assignment, planning |
 | [02-python-and-repo.md](02-python-and-repo.md) | Adding Python, extracting fonts, building the repository |
 | [03-data-and-new-slides.md](03-data-and-new-slides.md) | Official data, four more slides (10 total) |
 
-Note: the original 5-slide deck (the title, inflation, housing, spending and summary slides, and the Three.js scene) was generated earlier, in a separate session, and its prompts were not saved. Only the prompts of the sessions below are documented; nothing was reconstructed from memory.
+Note: prompt log 00 is copied from the session transcript of 28/10/2026 and is verbatim; logs 01–03 describe this later session and summarise the prompts and results.

@@ -55,7 +55,7 @@ Known limitations:
 - **Rounded, illustrative and not re-verified:** the annual inflation series 1995–2024 and the apartment price / average wage points used in slides 2, 3 and 7. Verify against cbs.gov.il before citing.
 - The Python chart uses English labels to avoid RTL shaping issues in matplotlib.
 - Only the Assistant font is clearly open-licensed; check the others before reuse.
-- Slides 1–3, 5 and 10 were generated in an earlier session whose prompts were not saved.
+- Slides 1–3, 5 and 10 and the Three.js scene come from an earlier session (28/10/2026); its prompts are in [`prompts/00-original-deck-session.md`](prompts/00-original-deck-session.md). The assistant's replies in that session are not archived here.
 
 ## Authors
 Yaakov Geppert and Yoav Haramaty (group `biu-yayo`, exercise 01).
