@@ -181,6 +181,48 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
+<style>
+.brow{display:grid;grid-template-columns:7.5em 1fr 4.6em;align-items:center;gap:.8em;margin:.7em 0;font-size:1.02em}
+.brow .bt{display:block;height:1.15em;border-radius:.6em;background:rgba(255,255,255,.07);overflow:hidden;direction:rtl}
+.brow .bt i{display:block;height:100%;border-radius:.6em}
+.brow .bv{text-align:start}
+.bgroup{margin-top:1.2em}.bgroup h4{margin:0 0 .2em;font-weight:700;opacity:.9}
+.pair{display:flex;gap:1.1em;font-size:.82em;opacity:.85;margin-bottom:.6em}.pair span i{display:inline-block;width:.8em;height:.8em;border-radius:50%;margin-inline-end:.4em}
+.bigstats{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4vw;margin-top:1.2em}
+.bigstats .stat{padding:1.4em 1.2em}.bigstats .stat b{display:block;font-size:3.1em;line-height:1}
+.bigstats .stat span{display:block;margin-top:.6em}
+.levers{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4vw;margin-top:1.2em}
+.levers .glass{padding:1.2em 1.4em}.levers h3{margin:0 0 .4em}.levers p{margin:0}
+</style>
+
+<style>
+.brow{display:grid;grid-template-columns:7.5em 1fr 4.6em;align-items:center;gap:.8em;margin:.7em 0;font-size:1.02em}
+.brow .bt{display:block;height:1.15em;border-radius:.6em;background:rgba(255,255,255,.07);overflow:hidden;direction:rtl}
+.brow .bt i{display:block;height:100%;border-radius:.6em}
+.brow .bv{text-align:start}
+.bgroup{margin-top:1.2em}.bgroup h4{margin:0 0 .2em;font-weight:700;opacity:.9}
+.pair{display:flex;gap:1.1em;font-size:.82em;opacity:.85;margin-bottom:.6em}.pair span i{display:inline-block;width:.8em;height:.8em;border-radius:50%;margin-inline-end:.4em}
+.bigstats{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4vw;margin-top:1.2em}
+.bigstats .stat{padding:1.4em 1.2em}.bigstats .stat b{display:block;font-size:3.1em;line-height:1}
+.bigstats .stat span{display:block;margin-top:.6em}
+.levers{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4vw;margin-top:1.2em}
+.levers .glass{padding:1.2em 1.4em}.levers h3{margin:0 0 .4em}.levers p{margin:0}
+</style>
+
+<style>
+.brow{display:grid;grid-template-columns:7.5em 1fr 4.6em;align-items:center;gap:.8em;margin:.7em 0;font-size:1.02em}
+.brow .bt{display:block;height:1.15em;border-radius:.6em;background:rgba(255,255,255,.07);overflow:hidden;direction:rtl}
+.brow .bt i{display:block;height:100%;border-radius:.6em}
+.brow .bv{text-align:start}
+.bgroup{margin-top:1.2em}.bgroup h4{margin:0 0 .2em;font-weight:700;opacity:.9}
+.pair{display:flex;gap:1.1em;font-size:.82em;opacity:.85;margin-bottom:.6em}.pair span i{display:inline-block;width:.8em;height:.8em;border-radius:50%;margin-inline-end:.4em}
+.bigstats{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4vw;margin-top:1.2em}
+.bigstats .stat{padding:1.4em 1.2em}.bigstats .stat b{display:block;font-size:3.1em;line-height:1}
+.bigstats .stat span{display:block;margin-top:.6em}
+.levers{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4vw;margin-top:1.2em}
+.levers .glass{padding:1.2em 1.4em}.levers h3{margin:0 0 .4em}.levers p{margin:0}
+</style>
+
 </head>
 <body>
 <div class="bg"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="grain"></div></div>
@@ -191,7 +233,7 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
 <main class="deck" id="deck">
 
 <!-- 1 -->
-<section class="slide active" data-title="פתיחה">
+<section class="slide active" data-title="פתיחה" data-set="0">
   <div class="scene" aria-hidden="true"><div class="rig" id="rig">
     <div class="cube"><div class="f">דיור</div><div class="f">שכר</div><div class="f">מזון</div><div class="f">מחיר</div><div class="f">₪</div><div class="f">ריבית</div></div>
     <div class="coin c1"></div><div class="coin c2"></div><div class="coin c3"></div>
@@ -207,7 +249,7 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
 </section>
 
 <!-- 2 -->
-<section class="slide" data-title="אינפלציה">
+<section class="slide" data-title="אינפלציה" data-set="1">
   <div class="tag rv">פרק א · מחירים</div>
   <h2 class="rv">מאינפלציה דו־ספרתית <em>ליציבות</em> – ובחזרה</h2>
   <div class="cols">
@@ -221,11 +263,11 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
       <li><span class="ic">3</span><span><b><bdi>2022</bdi>:</b> זינוק של כ־<bdi>5.3%</bdi>, השיא מזה כשני עשורים.</span></li>
     </ul>
   </div>
-  <div class="src">מקור: הלמ"ס, מדד המחירים לצרכן (שינוי שנתי, ערכים מעוגלים). יש לאמת מול lms.gov.il לפני הגשה.</div>
+  <div class="src">מקור: הלמ"ס, מדד המחירים לצרכן (שינוי שנתי, ערכים מעוגלים; לא אומת מחדש מול הסדרה הרשמית). ב־<bdi>2025</bdi>: <bdi>2.6%</bdi> (דצמבר מול דצמבר, כפי שדווח בתקשורת).</div>
 </section>
 
 <!-- 3 -->
-<section class="slide" data-title="דיור ושכר">
+<section class="slide" data-title="דיור ושכר" data-set="2">
   <div class="tag rv">פרק ב · דיור</div>
   <h2 class="rv">הדירה ברחה, <em>המשכורת</em> לא הדביקה</h2>
   <div class="cols">
@@ -242,26 +284,61 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
   <div class="src">נתונים מעוגלים להמחשה, על בסיס הלמ"ס ובנק ישראל. יש לאמת מספרים מדויקים לפני הגשה.</div>
 </section>
 
+<!--PY:rent:START-->
+<section class="slide" data-title="שכירות" data-set="2">
+  <div class="tag rv">פרק ב · שכירות</div>
+  <h2 class="rv">מי שלא קנה, <em>שוכר</em> ביוקר</h2>
+  <div class="cols">
+    <div class="chart-box glass rv">
+      <div class="pair"><span>שכר דירה חודשי, דירת <bdi>4</bdi> חדרים, רבעון <bdi>3</bdi> <bdi>2024</bdi> (ש"ח)</span></div>
+      <div class="brow"><span class="bl">תל אביב</span><span class="bt"><i style="width:100%;background:#ffc857"></i></span><b class="bv"><bdi dir="ltr">8,500</bdi></b></div><div class="brow"><span class="bl">ירושלים</span><span class="bt"><i style="width:69%;background:#ffc857"></i></span><b class="bv"><bdi dir="ltr">5,900</bdi></b></div><div class="brow"><span class="bl">ממוצע ארצי</span><span class="bt"><i style="width:61%;background:#ff6b6b"></i></span><b class="bv"><bdi dir="ltr">5,200</bdi></b></div><div class="brow"><span class="bl">חיפה</span><span class="bt"><i style="width:45%;background:#ffc857"></i></span><b class="bv"><bdi dir="ltr">3,800</bdi></b></div><div class="brow"><span class="bl">באר שבע</span><span class="bt"><i style="width:35%;background:#ffc857"></i></span><b class="bv"><bdi dir="ltr">3,000</bdi></b></div>
+    </div>
+    <ul class="points rv">
+      <li><span class="ic">₪</span><span>ממוצע ארצי לדירת <bdi>4</bdi> חדרים: <b class="num"><bdi>5,200</bdi></b> ש"ח בחודש; בתל אביב <bdi>8,500</bdi>.</span></li>
+      <li><span class="ic">▲</span><span>מדד שירותי הדיור, המשקף שכר דירה, עלה ב־<bdi>4.0%</bdi> בשנה, מול אינפלציה כללית של <bdi>3.4%</bdi>.</span></li>
+      <li><span class="ic">%</span><span>שכר דירה הוא כ־<bdi>25%</bdi> ממדד המחירים לצרכן, ולכן הוא משפיע על כל המדד.</span></li>
+    </ul>
+  </div>
+  <div class="src">מקור: הלמ"ס, כפי שפורסם ב־Globes (<bdi>24.12.2024</bdi>).</div>
+</section>
+<!--PY:rent:END-->
+
 <!-- 4 -->
-<section class="slide" data-title="הוצאות משק הבית">
+<section class="slide" data-title="הוצאות משק הבית" data-set="3">
   <div class="tag rv">פרק ג · משק הבית</div>
   <h2 class="rv">לאן הולך <em>הכסף</em> בסוף החודש</h2>
   <div class="cols">
     <div class="chart-box glass rv" style="display:grid;grid-template-columns:1fr 1fr;gap:1vw;align-items:center">
-      <div class="donut-wrap"><div class="donut3d" id="donut3d"><svg id="chartDonut" viewBox="0 0 300 300" role="img" aria-label="פילוח הוצאות משק בית"></svg></div><div class="donut-label"><b data-to="26" data-suf="%">26%</b><span>לדיור</span></div></div>
+      <div class="donut-wrap"><div class="donut3d" id="donut3d"><svg id="chartDonut" viewBox="0 0 300 300" role="img" aria-label="פילוח הוצאות משק בית"></svg></div><div class="donut-label"><b data-to="25.3" data-dec="1" data-suf="%">25.3%</b><span>לדיור</span></div></div>
       <div class="legend" id="donutLegend" style="flex-direction:column;font-size:1em"></div>
     </div>
     <ul class="points rv">
-      <li><span class="ic">1</span><span><b>דיור</b> (שכירות, משכנתא, ארנונה) הוא הסעיף הגדול ביותר בהוצאות.</span></li>
-      <li><span class="ic">2</span><span><b>מזון ותחבורה</b> יחד מהווים כשליש מהתקציב הממוצע.</span></li>
-      <li><span class="ic">3</span><span>משפחות צעירות ושוכרים מרגישים את העלייה חזק יותר מהממוצע.</span></li>
+      <li><span class="ic">1</span><span><b>דיור</b> הוא הסעיף הגדול ביותר: <bdi>25.3%</bdi> מההוצאה לתצרוכת, מתוך <bdi>18,088</bdi> ש"ח בחודש למשק בית.</span></li>
+      <li><span class="ic">2</span><span><b>תחבורה ותקשורת</b> (<bdi>18.6%</bdi>) ו<b>מזון</b> (<bdi>17.9%</bdi>) יחד מהווים יותר משליש מהתקציב.</span></li>
+      <li><span class="ic">3</span><span>בשני העשירונים התחתונים ההוצאה הכספית <b>גבוהה מההכנסה</b>.</span></li>
     </ul>
   </div>
-  <div class="src">פילוח משוער לפי סקר הוצאות משק הבית של הלמ"ס (מעוגל). יש לאמת מול הפרסום העדכני.</div>
+  <div class="src">מקור: הלמ"ס, ממצאים מסקר הוצאות משק הבית 2023 (פורסם <bdi>1.1.2026</bdi>). ב־<bdi>2023</bdi> שונתה שיטת מדידת ההכנסות, ולכן אין להשוות להכנסות בשנים קודמות.</div>
 </section>
 
-<!--PY:START-->
-<section class="slide" data-title="ניתוח פייתון">
+<!--PY:deciles:START-->
+<section class="slide" data-title="פערים" data-set="3">
+  <div class="tag rv">פרק ג · פערים</div>
+  <h2 class="rv">לא כולם מרגישים <em>אותו דבר</em></h2>
+  <div class="cols">
+    <div class="chart-box glass rv"><div class="bgroup"><h4>גרים בדירה בבעלותם</h4><div class="brow"><span class="bl">עשירון עליון</span><span class="bt"><i style="width:86%;background:#3ddbc4"></i></span><b class="bv"><bdi dir="ltr">85.9%</bdi></b></div><div class="brow"><span class="bl">עשירון תחתון</span><span class="bt"><i style="width:38%;background:#ff6b6b"></i></span><b class="bv"><bdi dir="ltr">37.6%</bdi></b></div></div><div class="bgroup"><h4>גרים בדירה שכורה</h4><div class="brow"><span class="bl">עשירון עליון</span><span class="bt"><i style="width:13%;background:#3ddbc4"></i></span><b class="bv"><bdi dir="ltr">12.6%</bdi></b></div><div class="brow"><span class="bl">עשירון תחתון</span><span class="bt"><i style="width:55%;background:#ff6b6b"></i></span><b class="bv"><bdi dir="ltr">55.4%</bdi></b></div></div></div>
+    <ul class="points rv">
+      <li><span class="ic">×</span><span>פער ההכנסות בין העשירון העליון לתחתון: פי <b class="num"><bdi>7.3</bdi></b>. פער ההוצאות: פי <bdi>2.0</bdi> בלבד.</span></li>
+      <li><span class="ic">₪</span><span>העשירון העליון משלם שכר דירה של <bdi>5,630</bdi> ש"ח, התחתון <bdi>2,763</bdi>.</span></li>
+      <li><span class="ic">⌂</span><span>ערך דירה ממוצעת בבעלות: כ־<bdi>3.96</bdi> מיליון ש"ח בעשירון העליון, כ־<bdi>1.51</bdi> בתחתון.</span></li>
+    </ul>
+  </div>
+  <div class="src">מקור: הלמ"ס, סקר הוצאות משק הבית <bdi>2023</bdi> (עשירונים לפי הכנסה נטו לנפש סטנדרטית). מדד ג'יני: <bdi>0.349</bdi>.</div>
+</section>
+<!--PY:deciles:END-->
+
+<!--PY:analysis:START-->
+<section class="slide" data-title="ניתוח פייתון" data-set="4">
   <div class="tag rv">פרק ד · ניתוח ב־Python</div>
   <h2 class="rv">מחירים, שכר ודירות: <em>מדד אחד</em></h2>
   <div class="cols">
@@ -272,12 +349,39 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
       <li><span class="ic">⌂</span><span>הדירה עלתה פי <b class="num"><bdi>3.83</bdi></b>: ריאלית <bdi dir="ltr">+154.4%</bdi>, ומ־<bdi>86</bdi> ל־<bdi>173</bdi> משכורות לדירה.</span></li>
     </ul>
   </div>
-  <div class="src">חושב ב־Python (<bdi>src/analysis.py</bdi>) מתוך <bdi>data/data.json</bdi>; נתונים מעוגלים להמחשה, יש לאמת מול הלמ"ס.</div>
+  <div class="src">חושב ב־Python (<bdi>src/analysis.py</bdi>) מתוך <bdi>data/data.json</bdi>; נתוני המחירים והשכר מעוגלים להמחשה, יש לאמת מול הלמ"ס.</div>
 </section>
-<!--PY:END-->
+<!--PY:analysis:END-->
+
+<!--PY:oecd:START-->
+<section class="slide" data-title="בהשוואה בינלאומית" data-set="4">
+  <div class="tag rv">פרק ה · בהשוואה</div>
+  <h2 class="rv">מחירים גבוהים, <em>שכר שרץ אחריהם</em></h2>
+  <div class="bigstats rv">
+    <div class="stat glass"><b class="c-coral num">+<bdi>38%</bdi></b><span>רמת המחירים הכללית בישראל מעל ממוצע ה־<bdi>OECD</bdi> ב־<bdi>2022</bdi>, הגבוהה בין החברות.</span></div>
+    <div class="stat glass"><b class="c-gold num">+<bdi>19%</bdi></b><span>מחירי המזון מעל ממוצע ה־<bdi>OECD</bdi> (נתוני <bdi>2017</bdi>, משרד הכלכלה). הערכות אחרות גבוהות יותר.</span></div>
+    <div class="stat glass"><b class="c-teal num">+<bdi>1.9%</bdi></b><span>עליית השכר הריאלי ב־<bdi>2024</bdi> (נומינלית <bdi>5.1%</bdi>). בינואר <bdi>2025</bdi> השכר עלה רק <bdi>2.0%</bdi> מול אינפלציה של <bdi>3.8%</bdi>.</span></div>
+  </div>
+  <div class="src">מקורות: <bdi>Times of Israel</bdi> (מדד יוקר המחיה של ה־<bdi>OECD</bdi>), <bdi>Globes</bdi> (משרד הכלכלה; הלמ"ס, <bdi>4.3.2025</bdi>). נתונים משנים שונות וסלים שונים, אין להשוות ביניהם ישירות.</div>
+</section>
+<!--PY:oecd:END-->
+
+<!--PY:policy:START-->
+<section class="slide" data-title="מה אפשר לעשות" data-set="4">
+  <div class="tag rv">פרק ו · כיוונים</div>
+  <h2 class="rv">מה אפשר <em>לעשות?</em></h2>
+  <div class="levers rv">
+    <div class="glass"><h3>להגדיל היצע</h3><p>קצב תכנון ובנייה גבוה יותר: דיור הוא <bdi>25.3%</bdi> מהוצאות משק הבית.</p></div>
+    <div class="glass"><h3>לחזק תחרות</h3><p>פחות חסמים ליבוא ולרשתות קטנות במזון, שהוא <bdi>17.9%</bdi> מההוצאה.</p></div>
+    <div class="glass"><h3>תחבורה ציבורית</h3><p>תחבורה ותקשורת הם <bdi>18.6%</bdi> מההוצאה: חלופה לרכב שנייה מקטינה את העלות.</p></div>
+    <div class="glass"><h3>להגן על שוכרים</h3><p>יותר ממחצית מהעשירון התחתון שוכרים (<bdi>55.4%</bdi>), מול <bdi>12.6%</bdi> בעליון.</p></div>
+  </div>
+  <div class="src">כיוונים לדיון, לא המלצות מדיניות מבוססות מחקר. המספרים: הלמ"ס, סקר הוצאות משק הבית <bdi>2023</bdi>.</div>
+</section>
+<!--PY:policy:END-->
 
 <!-- 5 -->
-<section class="slide" data-title="סיכום">
+<section class="slide" data-title="סיכום" data-set="4">
   <div class="tag rv">סיכום</div>
   <h2 class="rv">מה למדנו <em>ומה הלאה?</em></h2>
   <div class="sum-grid rv">
@@ -293,7 +397,7 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
 <nav class="controls" aria-label="ניווט במצגת">
   <button class="btn" id="prev" aria-label="השקף הקודם" title="הקודם (→)"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
   <div class="dots" id="dots"></div>
-  <span class="counter num" id="counter">1 / 6</span>
+  <span class="counter num" id="counter">1 / 10</span>
   <button class="btn" id="next" aria-label="השקף הבא" title="הבא (←)"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
   <button class="btn" id="full" aria-label="מסך מלא" title="מסך מלא (F)"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
 </nav>
@@ -340,7 +444,7 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
     for(var i=0;i<pts.length-1;i++)if(y<=pts[i+1][0]){var a=pts[i],b=pts[i+1],t=(y-a[0])/(b[0]-a[0]);return a[1]+(b[1]-a[1])*t}
     return pts[pts.length-1][1];
   }
-  var spend=[[26,0xffc857],[16,0xff6b6b],[14,0x3ddbc4],[10,0x8b7cff],[5,0xff9ff3],[29,0x5f6491]];
+  var spend=[[25.3,0xffc857],[18.6,0xff6b6b],[17.9,0x3ddbc4],[10.7,0x8b7cff],[9.1,0xff9ff3],[18.4,0x5f6491]];
   function col(h){return new THREE.Color(h)}
   function grad(a,b,t){return col(a).lerp(col(b),t)}
 
@@ -368,7 +472,7 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
   var CAPS=["העמודות: רמת המחירים המצטברת 1995–2024 (חישוב מהאינפלציה השנתית)",
             "העמודות: האינפלציה השנתית (%)",
             "העמודות: דירה ממוצעת במספר משכורות (2000–2024, בין נקודות הנתונים משוער)",
-            "העמודות: שיעור כל סעיף מהוצאות משק הבית (בקירוב)",
+            "העמודות: שיעור כל סעיף מהוצאות משק הבית (הלמ"ס, סקר 2023)",
             "העמודות: רמת המחירים המצטברת, 1995–2024"];
 
   var geo=new THREE.BoxGeometry(1,1,1);
@@ -495,7 +599,7 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
   /* ---------- data ---------- */
   var infl={1995:8.1,1996:10.6,1997:7.0,1998:8.6,1999:1.3,2000:0,2001:1.4,2002:6.5,2003:-1.9,2004:1.2,2005:2.4,2006:2.1,2007:0.5,2008:4.5,2009:3.3,2010:2.7,2011:2.2,2012:1.6,2013:1.8,2014:0.5,2015:-1.0,2016:-0.2,2017:0.4,2018:0.8,2019:0.6,2020:-0.6,2021:1.5,2022:5.3,2023:3.0,2024:3.2};
   var house=[{y:2000,p:600,w:7000},{y:2005,p:780,w:7600},{y:2010,p:1150,w:8900},{y:2015,p:1550,w:9900},{y:2020,p:1850,w:11500},{y:2024,p:2300,w:13300}];
-  var spend=[{n:"דיור",v:26,c:"#ffc857"},{n:"מזון",v:16,c:"#ff6b6b"},{n:"תחבורה",v:14,c:"#3ddbc4"},{n:"חינוך ותרבות",v:10,c:"#8b7cff"},{n:"בריאות",v:5,c:"#ff9ff3"},{n:"אחר",v:29,c:"#5f6491"}];
+  var spend=[{n:"דיור",v:25.3,c:"#ffc857"},{n:"תחבורה ותקשורת",v:18.6,c:"#ff6b6b"},{n:"מזון",v:17.9,c:"#3ddbc4"},{n:"תרבות, חינוך ובידור",v:10.7,c:"#8b7cff"},{n:"תחזוקת דירה ומשק בית",v:9.1,c:"#ff9ff3"},{n:"אחר (בריאות, ריהוט, הלבשה ועוד)",v:18.4,c:"#5f6491"}];
 
   /* ---------- helpers ---------- */
   var NS="http://www.w3.org/2000/svg";
@@ -629,7 +733,7 @@ svg .grid{stroke:rgba(255,255,255,.07);stroke-width:1}
     counter.textContent=(i+1)+" / "+N;
     prog.style.width=((i+1)/N*100)+"%";
     btnP.disabled=i===0;btnN.disabled=i===N-1;
-    window.__cur=i;if(window.__t3)window.__t3.set(i);cur=i;history.replaceState(null,"","#"+(i+1));
+    var ds=slides[i].getAttribute("data-set");window.__cur=ds==null?i:+ds;if(window.__t3)window.__t3.set(window.__cur);cur=i;history.replaceState(null,"","#"+(i+1));
   }
   btnN.onclick=function(){go(cur+1)};btnP.onclick=function(){go(cur-1)};
   /* RTL: left arrow = forward, right arrow = back */

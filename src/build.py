@@ -1,7 +1,15 @@
-"""Inject the Python analysis (stats + chart) into index.html as a slide.
+"""Generate the data-driven slides of index.html with Python.
 
-Run src/analysis.py first. Idempotent: the slide lives between the
-<!--PY:START--> / <!--PY:END--> markers and is regenerated on every run.
+Run src/analysis.py first. Idempotent: every generated block lives between
+<!--PY:name:START--> / <!--PY:name:END--> markers and is rebuilt on each run.
+
+Generated blocks
+  css        small stylesheet for the bar rows (in <head>)
+  rent       slide: rents by city (from data.json)
+  deciles    slide: top vs bottom income decile (from data.json)
+  analysis   slide: indices chart + numbers computed by analysis.py
+  oecd       slide: international comparison and wages
+  policy     slide: levers (qualitative)
 """
 import base64
 import json
@@ -10,11 +18,91 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 html_path = ROOT / "index.html"
 html = html_path.read_text(encoding="utf-8")
+data = json.loads((ROOT / "data" / "data.json").read_text(encoding="utf-8"))
 st = json.loads((ROOT / "build" / "analysis.json").read_text(encoding="utf-8"))
 img = base64.b64encode((ROOT / "docs" / "charts" / "index_2000.png").read_bytes()).decode()
 
-slide = f"""<!--PY:START-->
-<section class="slide" data-title="ניתוח פייתון">
+
+def fmt(n):
+    return f"{n:,}"
+
+
+def bar_row(label, value, vmax, text, color):
+    w = max(2, round(value / vmax * 100))
+    return (f'<div class="brow"><span class="bl">{label}</span>'
+            f'<span class="bt"><i style="width:{w}%;background:{color}"></i></span>'
+            f'<b class="bv"><bdi dir="ltr">{text}</bdi></b></div>')
+
+
+# ---------- css ----------
+css = """<style>
+.brow{display:grid;grid-template-columns:7.5em 1fr 4.6em;align-items:center;gap:.8em;margin:.7em 0;font-size:1.02em}
+.brow .bt{display:block;height:1.15em;border-radius:.6em;background:rgba(255,255,255,.07);overflow:hidden;direction:rtl}
+.brow .bt i{display:block;height:100%;border-radius:.6em}
+.brow .bv{text-align:start}
+.bgroup{margin-top:1.2em}.bgroup h4{margin:0 0 .2em;font-weight:700;opacity:.9}
+.pair{display:flex;gap:1.1em;font-size:.82em;opacity:.85;margin-bottom:.6em}.pair span i{display:inline-block;width:.8em;height:.8em;border-radius:50%;margin-inline-end:.4em}
+.bigstats{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4vw;margin-top:1.2em}
+.bigstats .stat{padding:1.4em 1.2em}.bigstats .stat b{display:block;font-size:3.1em;line-height:1}
+.bigstats .stat span{display:block;margin-top:.6em}
+.levers{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4vw;margin-top:1.2em}
+.levers .glass{padding:1.2em 1.4em}.levers h3{margin:0 0 .4em}.levers p{margin:0}
+</style>"""
+
+# ---------- rent ----------
+r = data["rent_4room_q3_2024_nis"]
+vmax = max(v for _, v in r["items"])
+he_city = {"Tel Aviv": "תל אביב", "Jerusalem": "ירושלים", "National average": "ממוצע ארצי",
+           "Haifa": "חיפה", "Beersheba": "באר שבע"}
+rows = "".join(bar_row(he_city[n], v, vmax, fmt(v), "#ff6b6b" if n == "National average" else "#ffc857")
+               for n, v in r["items"])
+rent = f"""<!--PY:rent:START-->
+<section class="slide" data-title="שכירות" data-set="2">
+  <div class="tag rv">פרק ב · שכירות</div>
+  <h2 class="rv">מי שלא קנה, <em>שוכר</em> ביוקר</h2>
+  <div class="cols">
+    <div class="chart-box glass rv">
+      <div class="pair"><span>שכר דירה חודשי, דירת <bdi>4</bdi> חדרים, רבעון <bdi>3</bdi> <bdi>2024</bdi> (ש"ח)</span></div>
+      {rows}
+    </div>
+    <ul class="points rv">
+      <li><span class="ic">₪</span><span>ממוצע ארצי לדירת <bdi>4</bdi> חדרים: <b class="num"><bdi>{fmt(5200)}</bdi></b> ש"ח בחודש; בתל אביב <bdi>{fmt(8500)}</bdi>.</span></li>
+      <li><span class="ic">▲</span><span>מדד שירותי הדיור, המשקף שכר דירה, עלה ב־<bdi>{r['housing_services_index_yoy_pct']}%</bdi> בשנה, מול אינפלציה כללית של <bdi>{r['cpi_yoy_pct']}%</bdi>.</span></li>
+      <li><span class="ic">%</span><span>שכר דירה הוא כ־<bdi>{r['rent_share_of_cpi_pct']}%</bdi> ממדד המחירים לצרכן, ולכן הוא משפיע על כל המדד.</span></li>
+    </ul>
+  </div>
+  <div class="src">מקור: הלמ"ס, כפי שפורסם ב־Globes (<bdi>24.12.2024</bdi>).</div>
+</section>
+<!--PY:rent:END-->"""
+
+# ---------- deciles ----------
+d = data["deciles_2023"]
+tb = d["top_vs_bottom"]
+def pair_rows(label, key, vmax):
+    top, bot = tb[key]
+    return (f'<div class="bgroup"><h4>{label}</h4>'
+            + bar_row("עשירון עליון", top, vmax, f"{top}%", "#3ddbc4")
+            + bar_row("עשירון תחתון", bot, vmax, f"{bot}%", "#ff6b6b") + "</div>")
+dec_rows = pair_rows("גרים בדירה בבעלותם", "owner_occupied_pct", 100) + pair_rows("גרים בדירה שכורה", "renting_pct", 100)
+deciles = f"""<!--PY:deciles:START-->
+<section class="slide" data-title="פערים" data-set="3">
+  <div class="tag rv">פרק ג · פערים</div>
+  <h2 class="rv">לא כולם מרגישים <em>אותו דבר</em></h2>
+  <div class="cols">
+    <div class="chart-box glass rv">{dec_rows}</div>
+    <ul class="points rv">
+      <li><span class="ic">×</span><span>פער ההכנסות בין העשירון העליון לתחתון: פי <b class="num"><bdi>{d['income_gap_x']}</bdi></b>. פער ההוצאות: פי <bdi>{d['spending_gap_x']}</bdi> בלבד.</span></li>
+      <li><span class="ic">₪</span><span>העשירון העליון משלם שכר דירה של <bdi>{fmt(tb['monthly_rent_nis'][0])}</bdi> ש"ח, התחתון <bdi>{fmt(tb['monthly_rent_nis'][1])}</bdi>.</span></li>
+      <li><span class="ic">⌂</span><span>ערך דירה ממוצעת בבעלות: כ־<bdi>3.96</bdi> מיליון ש"ח בעשירון העליון, כ־<bdi>1.51</bdi> בתחתון.</span></li>
+    </ul>
+  </div>
+  <div class="src">מקור: הלמ"ס, סקר הוצאות משק הבית <bdi>2023</bdi> (עשירונים לפי הכנסה נטו לנפש סטנדרטית). מדד ג'יני: <bdi>{d['gini']}</bdi>.</div>
+</section>
+<!--PY:deciles:END-->"""
+
+# ---------- analysis ----------
+analysis = f"""<!--PY:analysis:START-->
+<section class="slide" data-title="ניתוח פייתון" data-set="4">
   <div class="tag rv">פרק ד · ניתוח ב־Python</div>
   <h2 class="rv">מחירים, שכר ודירות: <em>מדד אחד</em></h2>
   <div class="cols">
@@ -25,19 +113,66 @@ slide = f"""<!--PY:START-->
       <li><span class="ic">⌂</span><span>הדירה עלתה פי <b class="num"><bdi>{st['price_multiple']}</bdi></b>: ריאלית <bdi dir="ltr">{st['real_house_price_change_pct']:+}%</bdi>, ומ־<bdi>{st['salaries_to_buy_2000']}</bdi> ל־<bdi>{st['salaries_to_buy_2024']}</bdi> משכורות לדירה.</span></li>
     </ul>
   </div>
-  <div class="src">חושב ב־Python (<bdi>src/analysis.py</bdi>) מתוך <bdi>data/data.json</bdi>; נתונים מעוגלים להמחשה, יש לאמת מול הלמ"ס.</div>
+  <div class="src">חושב ב־Python (<bdi>src/analysis.py</bdi>) מתוך <bdi>data/data.json</bdi>; נתוני המחירים והשכר מעוגלים להמחשה, יש לאמת מול הלמ"ס.</div>
 </section>
-<!--PY:END-->
-"""
+<!--PY:analysis:END-->"""
 
-if "<!--PY:START-->" in html:
-    a = html.index("<!--PY:START-->")
-    b = html.index("<!--PY:END-->") + len("<!--PY:END-->")
-    html = html[:a] + slide.rstrip("\n") + html[b:]
-else:
-    anchor = "<!-- 5 -->"
-    assert anchor in html, "summary slide marker not found"
-    html = html.replace(anchor, slide + "\n" + anchor, 1)
+# ---------- oecd ----------
+o = data["oecd_and_wages"]
+oecd = f"""<!--PY:oecd:START-->
+<section class="slide" data-title="בהשוואה בינלאומית" data-set="4">
+  <div class="tag rv">פרק ה · בהשוואה</div>
+  <h2 class="rv">מחירים גבוהים, <em>שכר שרץ אחריהם</em></h2>
+  <div class="bigstats rv">
+    <div class="stat glass"><b class="c-coral num">+<bdi>{o['price_level_vs_oecd_2022_pct']}%</bdi></b><span>רמת המחירים הכללית בישראל מעל ממוצע ה־<bdi>OECD</bdi> ב־<bdi>2022</bdi>, הגבוהה בין החברות.</span></div>
+    <div class="stat glass"><b class="c-gold num">+<bdi>{o['food_vs_oecd_pct']}%</bdi></b><span>מחירי המזון מעל ממוצע ה־<bdi>OECD</bdi> (נתוני <bdi>{o['food_vs_oecd_year']}</bdi>, משרד הכלכלה). הערכות אחרות גבוהות יותר.</span></div>
+    <div class="stat glass"><b class="c-teal num">+<bdi>{o['real_wage_change_2024_pct']}%</bdi></b><span>עליית השכר הריאלי ב־<bdi>2024</bdi> (נומינלית <bdi>{o['nominal_wage_change_2024_pct']}%</bdi>). בינואר <bdi>2025</bdi> השכר עלה רק <bdi>{o['wage_jan2025_yoy_pct']}%</bdi> מול אינפלציה של <bdi>{o['cpi_jan2025_yoy_pct']}%</bdi>.</span></div>
+  </div>
+  <div class="src">מקורות: <bdi>Times of Israel</bdi> (מדד יוקר המחיה של ה־<bdi>OECD</bdi>), <bdi>Globes</bdi> (משרד הכלכלה; הלמ"ס, <bdi>4.3.2025</bdi>). נתונים משנים שונות וסלים שונים, אין להשוות ביניהם ישירות.</div>
+</section>
+<!--PY:oecd:END-->"""
 
+# ---------- policy ----------
+policy = """<!--PY:policy:START-->
+<section class="slide" data-title="מה אפשר לעשות" data-set="4">
+  <div class="tag rv">פרק ו · כיוונים</div>
+  <h2 class="rv">מה אפשר <em>לעשות?</em></h2>
+  <div class="levers rv">
+    <div class="glass"><h3>להגדיל היצע</h3><p>קצב תכנון ובנייה גבוה יותר: דיור הוא <bdi>25.3%</bdi> מהוצאות משק הבית.</p></div>
+    <div class="glass"><h3>לחזק תחרות</h3><p>פחות חסמים ליבוא ולרשתות קטנות במזון, שהוא <bdi>17.9%</bdi> מההוצאה.</p></div>
+    <div class="glass"><h3>תחבורה ציבורית</h3><p>תחבורה ותקשורת הם <bdi>18.6%</bdi> מההוצאה: חלופה לרכב שנייה מקטינה את העלות.</p></div>
+    <div class="glass"><h3>להגן על שוכרים</h3><p>יותר ממחצית מהעשירון התחתון שוכרים (<bdi>55.4%</bdi>), מול <bdi>12.6%</bdi> בעליון.</p></div>
+  </div>
+  <div class="src">כיוונים לדיון, לא המלצות מדיניות מבוססות מחקר. המספרים: הלמ"ס, סקר הוצאות משק הבית <bdi>2023</bdi>.</div>
+</section>
+<!--PY:policy:END-->"""
+
+
+def put(name, block, anchor, before=True):
+    global html
+    start, end = f"<!--PY:{name}:START-->", f"<!--PY:{name}:END-->"
+    if start in html:
+        a = html.index(start)
+        b = html.index(end) + len(end)
+        html = html[:a] + block + html[b:]
+    else:
+        assert anchor in html, f"anchor {anchor!r} not found"
+        html = html.replace(anchor, (block + "\n\n" + anchor) if before else (anchor + "\n\n" + block), 1)
+
+
+# migrate the earlier single-slide markers
+html = html.replace("<!--PY:START-->", "<!--PY:analysis:START-->").replace("<!--PY:END-->", "<!--PY:analysis:END-->")
+
+put("css", css, "</head>")
+put("rent", rent, "<!-- 4 -->")
+put("analysis", analysis, "<!-- 5 -->")
+put("deciles", deciles, "<!--PY:analysis:START-->")
+put("oecd", oecd, "<!--PY:analysis:END-->", before=False)
+put("policy", policy, "<!--PY:oecd:END-->", before=False)
+
+# slide counter initial text
+import re
+n = len(re.findall(r'<section class="slide', html))
+html = re.sub(r'(id="counter">1 / )\d+', rf"\g<1>{n}", html)
 html_path.write_text(html, encoding="utf-8")
-print("slide written to", html_path)
+print("slides:", n)

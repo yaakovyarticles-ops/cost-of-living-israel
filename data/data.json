@@ -1,13 +1,165 @@
 {
-  "_note": "Rounded illustrative figures (CBS / Bank of Israel based). Verify against official sources before citing.",
-  "inflation_pct": {"1995":8.1,"1996":10.6,"1997":7.0,"1998":8.6,"1999":1.3,"2000":0,"2001":1.4,"2002":6.5,"2003":-1.9,"2004":1.2,"2005":2.4,"2006":2.1,"2007":0.5,"2008":4.5,"2009":3.3,"2010":2.7,"2011":2.2,"2012":1.6,"2013":1.8,"2014":0.5,"2015":-1.0,"2016":-0.2,"2017":0.4,"2018":0.8,"2019":0.6,"2020":-0.6,"2021":1.5,"2022":5.3,"2023":3.0,"2024":3.2},
-  "housing": [
-    {"year":2000,"price_kils":600,"avg_wage":7000},
-    {"year":2005,"price_kils":780,"avg_wage":7600},
-    {"year":2010,"price_kils":1150,"avg_wage":8900},
-    {"year":2015,"price_kils":1550,"avg_wage":9900},
-    {"year":2020,"price_kils":1850,"avg_wage":11500},
-    {"year":2024,"price_kils":2300,"avg_wage":13300}
+ "_note": "Figures marked 'official' come from CBS releases read in full; the rest are rounded illustrative figures (CBS / Bank of Israel based) not re-verified against the official series.",
+ "inflation_pct": {
+  "1995": 8.1,
+  "1996": 10.6,
+  "1997": 7.0,
+  "1998": 8.6,
+  "1999": 1.3,
+  "2000": 0,
+  "2001": 1.4,
+  "2002": 6.5,
+  "2003": -1.9,
+  "2004": 1.2,
+  "2005": 2.4,
+  "2006": 2.1,
+  "2007": 0.5,
+  "2008": 4.5,
+  "2009": 3.3,
+  "2010": 2.7,
+  "2011": 2.2,
+  "2012": 1.6,
+  "2013": 1.8,
+  "2014": 0.5,
+  "2015": -1.0,
+  "2016": -0.2,
+  "2017": 0.4,
+  "2018": 0.8,
+  "2019": 0.6,
+  "2020": -0.6,
+  "2021": 1.5,
+  "2022": 5.3,
+  "2023": 3.0,
+  "2024": 3.2
+ },
+ "housing": [
+  {
+   "year": 2000,
+   "price_kils": 600,
+   "avg_wage": 7000
+  },
+  {
+   "year": 2005,
+   "price_kils": 780,
+   "avg_wage": 7600
+  },
+  {
+   "year": 2010,
+   "price_kils": 1150,
+   "avg_wage": 8900
+  },
+  {
+   "year": 2015,
+   "price_kils": 1550,
+   "avg_wage": 9900
+  },
+  {
+   "year": 2020,
+   "price_kils": 1850,
+   "avg_wage": 11500
+  },
+  {
+   "year": 2024,
+   "price_kils": 2300,
+   "avg_wage": 13300
+  }
+ ],
+ "household_spending_pct": {
+  "source": "CBS, Household Expenditure Survey 2023 (published 2026-01-01), official",
+  "items": [
+   [
+    "Housing",
+    25.3
+   ],
+   [
+    "Transport & communications",
+    18.6
+   ],
+   [
+    "Food (incl. fruit & veg)",
+    17.9
+   ],
+   [
+    "Culture, education & entertainment",
+    10.7
+   ],
+   [
+    "Home maintenance & household",
+    9.1
+   ],
+   [
+    "Other (health 6.4, furniture 3.7, clothing 3.5, other 4.8)",
+    18.4
+   ]
+  ]
+ },
+ "rent_4room_q3_2024_nis": {
+  "source": "CBS via Globes, 2024-12-24",
+  "items": [
+   [
+    "Tel Aviv",
+    8500
+   ],
+   [
+    "Jerusalem",
+    5900
+   ],
+   [
+    "National average",
+    5200
+   ],
+   [
+    "Haifa",
+    3800
+   ],
+   [
+    "Beersheba",
+    3000
+   ]
   ],
-  "household_spending_pct": {"Housing":26,"Food":16,"Transport":14,"Education & culture":10,"Health":5,"Other":29}
+  "housing_services_index_yoy_pct": 4.0,
+  "cpi_yoy_pct": 3.4,
+  "rent_share_of_cpi_pct": 25
+ },
+ "deciles_2023": {
+  "source": "CBS, Household Expenditure Survey 2023, official",
+  "top_vs_bottom": {
+   "owner_occupied_pct": [
+    85.9,
+    37.6
+   ],
+   "renting_pct": [
+    12.6,
+    55.4
+   ],
+   "monthly_rent_nis": [
+    5630,
+    2763
+   ],
+   "avg_home_value_k_nis": [
+    3960,
+    1515
+   ]
+  },
+  "income_gap_x": 7.3,
+  "spending_gap_x": 2.0,
+  "gini": 0.349,
+  "top_income_share_pct": 22.1,
+  "bottom_income_share_pct": 2.6
+ },
+ "oecd_and_wages": {
+  "price_level_vs_oecd_2022_pct": 38,
+  "food_vs_oecd_pct": 19,
+  "food_vs_oecd_year": 2017,
+  "real_wage_change_2024_pct": 1.9,
+  "nominal_wage_change_2024_pct": 5.1,
+  "wage_jan2025_yoy_pct": 2.0,
+  "cpi_jan2025_yoy_pct": 3.8,
+  "sources": [
+   "Times of Israel (OECD 2022 cost-of-living index)",
+   "Globes (Ministry of Economy, OECD 2017 data)",
+   "Globes 2025-03-04 (CBS wages)"
+  ]
+ },
+ "inflation_2025_dec_yoy_pct": 2.6
 }
