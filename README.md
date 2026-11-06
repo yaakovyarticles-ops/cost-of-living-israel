@@ -58,4 +58,4 @@ Known limitations:
 - Slides 1–3, 5 and 10 were generated in an earlier session whose prompts were not saved.
 
 ## Authors
-Yaakov Geppert and partner (details are in the submission form).
+Yaakov Geppert and Yoav Haramaty (group `biu-yayo`, exercise 01).
